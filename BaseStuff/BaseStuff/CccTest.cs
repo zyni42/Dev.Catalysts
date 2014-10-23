@@ -20,9 +20,14 @@ namespace BaseStuff
 			List<string[]> splittedLines = new List<string[]> (lines.Length);
 			
 			for (int i = 0; i < lines.Length; i++)
-				splittedLines.Add (lines[i].Split (new char [] {' '}));
+				splittedLines.Add (lines[i].Split (new char [] {' '}, StringSplitOptions.RemoveEmptyEntries));
 			
 			return splittedLines;
+		}
+
+		public static string[] SplitBySpaces (string input)
+		{
+			return input.Split (new char [] {' '}, StringSplitOptions.RemoveEmptyEntries);
 		}
 
 		public static void CreateResultTxtFile (string file, string result)
@@ -78,6 +83,14 @@ namespace BaseStuff
 		public static bool IsValidOneBasedRowAndColumn (int row, int column, int numRows, int numColumns)
 		{
 			return (row > 0 && row <= numRows && column > 0 && column <= numColumns);
+		}
+
+		public static void WriteLineToStandardError (string msg)
+		{
+			msg += System.Environment.NewLine;
+			byte[] bytes = new byte[msg.Length * sizeof(char)];
+			System.Buffer.BlockCopy(msg.ToCharArray(), 0, bytes, 0, bytes.Length);
+			Console.OpenStandardError ().Write (bytes, 0, bytes.Length);
 		}
     }
 }

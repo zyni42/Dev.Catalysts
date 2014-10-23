@@ -166,14 +166,6 @@ namespace Autonomous_Car_Warmup
 			}
 		}
 
-		public void ErrOut (string msg)
-		{
-			msg += System.Environment.NewLine;
-			byte[] bytes = new byte[msg.Length * sizeof(char)];
-			System.Buffer.BlockCopy(msg.ToCharArray(), 0, bytes, 0, bytes.Length);
-			Console.OpenStandardError ().Write (bytes, 0, bytes.Length);
-		}
-
 		public string CalculateResult()
 		{
 			var playerPaddle= new Paddle ()  { Height = 150, Width = 15, Distance =  10, MoveMaxUp = -36, MoveMaxDown = 36 };
@@ -187,22 +179,22 @@ namespace Autonomous_Car_Warmup
 			while (!File.Exists ("result.txt"))
 			{
 				var conLine = Console.ReadLine ();
-				ErrOut ("IN  : " + conLine);
-				var playerData = conLine.Split (new char[] {' '}, StringSplitOptions.RemoveEmptyEntries);
+				BaseStuff.CccTest.WriteLineToStandardError ("IN  : " + conLine);
+				var playerData = BaseStuff.CccTest.SplitBySpaces (conLine);
 				if (playerData[0] != "player") throw new Exception ("NOT player: " + playerData[0]);
 				playerPaddle.Position = int.Parse (playerData[1]);
 				playerPaddle.Move     = int.Parse (playerData[2]);
 
 				conLine = Console.ReadLine ();
-				ErrOut ("IN  : " + conLine);
-				var cpuData = conLine.Split (new char[] {' '}, StringSplitOptions.RemoveEmptyEntries);
+				BaseStuff.CccTest.WriteLineToStandardError ("IN  : " + conLine);
+				var cpuData = BaseStuff.CccTest.SplitBySpaces (conLine);
 				if (cpuData[0] != "cpu") throw new Exception ("NOT cpu: " + cpuData[0]);
 				cpuPaddle.Position = int.Parse (cpuData[1]);
 				cpuPaddle.Move     = int.Parse (cpuData[2]);
 
 				conLine = Console.ReadLine ();
-				ErrOut ("IN  : " + conLine);
-				var ballData = conLine.Split (new char[] {' '}, StringSplitOptions.RemoveEmptyEntries);
+				BaseStuff.CccTest.WriteLineToStandardError ("IN  : " + conLine);
+				var ballData = BaseStuff.CccTest.SplitBySpaces (conLine);
 				if (ballData[0] != "ball") throw new Exception ("NOT ball: " + ballData[0]);
 				ball.PosX		= float.Parse (ballData[1].Replace (".", ","));
 				ball.PosY		= float.Parse (ballData[2].Replace (".", ","));
@@ -210,8 +202,8 @@ namespace Autonomous_Car_Warmup
 				ball.VelocityY	= float.Parse (ballData[4].Replace (".", ","));
 
 				conLine = Console.ReadLine ();
-				ErrOut ("IN  : " + conLine);
-				var updateCommand = conLine.Split (new char[] {' '}, StringSplitOptions.RemoveEmptyEntries);
+				BaseStuff.CccTest.WriteLineToStandardError ("IN  : " + conLine);
+				var updateCommand = BaseStuff.CccTest.SplitBySpaces (conLine);
 				if (updateCommand[0] != "update") throw new Exception ("NOT update: " + updateCommand[0]);
 
 				// Where is ball after n steps?
@@ -230,7 +222,7 @@ namespace Autonomous_Car_Warmup
 				var nextMove = playerPaddle.CalculateNextMove (ballSteps.ToArray ());
 				update = "move " + nextMove;
 
-				ErrOut ("OUT : " + update);
+				BaseStuff.CccTest.WriteLineToStandardError ("OUT : " + update);
 				Console.WriteLine (update);
 			}
 
