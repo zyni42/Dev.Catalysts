@@ -5,7 +5,7 @@ VisualStudioVersion = 12.0.30723.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CCC-21-Rathaus", "CCC-21-Rathaus\CCC-21-Rathaus.csproj", "{0B19FF2E-7546-4C2A-881C-FF118743507D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BaseStuff", "..\BaseStuff\BaseStuff\BaseStuff.csproj", "{03BABF37-FA46-438D-8F8B-DEB3DA2E5AF6}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BaseStuff", "..\..\BaseStuff\BaseStuff\BaseStuff.csproj", "{03BABF37-FA46-438D-8F8B-DEB3DA2E5AF6}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

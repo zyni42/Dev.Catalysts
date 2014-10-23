@@ -49,7 +49,7 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\BaseStuff\BaseStuff\BaseStuff.csproj">
+    <ProjectReference Include="..\..\..\BaseStuff\BaseStuff\BaseStuff.csproj">
       <Project>{03babf37-fa46-438d-8f8b-deb3da2e5af6}</Project>
       <Name>BaseStuff</Name>
     </ProjectReference>
