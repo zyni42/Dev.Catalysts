@@ -16,7 +16,7 @@ namespace CCC_21_Rathaus
 
 		static void Main(string[] args)
 		{
-			var lvl1Result = DoLevel1 ();
+			var lvlResult = DoLevel6 ();
 		}
 
 		static string[] DoLevel1 ()
@@ -25,21 +25,99 @@ namespace CCC_21_Rathaus
 
 			Level1 lvl1;
 			string result;
-			string lvlFile;
-			string extLvl = ".txt";
+			//string lvlFile;
+			//string extLvl = ".txt";
 
 			// Input #1
-			lvlFile = Level1File + "0";
-			lvl1 = new Level1 (InputDir + lvlFile + ExtIn);
+			//lvlFile = Level1File + "0";
+			lvl1 = new Level1 (/*InputDir + lvlFile + ExtIn*/);
 			result = lvl1.CalculateResult ();
 			lvl1Results.Add (result);
-			BaseStuff.CccTest.CreateResultTxtFile (OutputDir + lvlFile + ExtOut + extLvl, result);
+			//BaseStuff.CccTest.CreateResultTxtFile (OutputDir + lvlFile + ExtOut + extLvl, result);
 
 			// Input #2
 			// ...
 			// Input #n
 
 			return lvl1Results.ToArray ();
+		}
+		static string[] DoLevel2 ()
+		{
+			var lvl2Results = new List<string> ();
+
+			Level2 lvl2;
+			string result;
+			//string lvlFile;
+			//string extLvl = ".txt";
+
+			// Input #1
+			//lvlFile = Level1File + "0";
+			lvl2 = new Level2 (/*InputDir + lvlFile + ExtIn*/);
+			result = lvl2.CalculateResult ();
+			lvl2Results.Add (result);
+			//BaseStuff.CccTest.CreateResultTxtFile (OutputDir + lvlFile + ExtOut + extLvl, result);
+
+			// Input #2
+			// ...
+			// Input #n
+
+			return lvl2Results.ToArray ();
+		}
+		static string[] DoLevel3 ()
+		{
+			var lvl3Results = new List<string> ();
+
+			Level3 lvl3;
+			string result;
+
+			// Input #1
+			lvl3 = new Level3 ();
+			result = lvl3.CalculateResult ();
+			lvl3Results.Add (result);
+
+			return lvl3Results.ToArray ();
+		}
+		static string[] DoLevel4 ()
+		{
+			var lvl4Results = new List<string> ();
+
+			Level4 lvl4;
+			string result;
+
+			// Input #1
+			lvl4 = new Level4 ();
+			result = lvl4.CalculateResult ();
+			lvl4Results.Add (result);
+
+			return lvl4Results.ToArray ();
+		}
+		static string[] DoLevel5 ()
+		{
+			var lvl5Results = new List<string> ();
+
+			Level5 lvl5;
+			string result;
+
+			// Input #1
+			lvl5 = new Level5 ();
+			result = lvl5.CalculateResult ();
+			lvl5Results.Add (result);
+
+			return lvl5Results.ToArray ();
+		}
+		static string[] DoLevel6 ()
+		{
+			var lvl6Results = new List<string> ();
+
+			Level6 lvl6;
+			string result;
+
+			// Input #1
+			lvl6 = new Level6 ();
+			result = lvl6.CalculateResult ();
+			lvl6Results.Add (result);
+
+			return lvl6Results.ToArray ();
 		}
 	}
 }

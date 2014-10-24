@@ -99,5 +99,10 @@ namespace BaseStuff
 			System.Buffer.BlockCopy(msg.ToCharArray(), 0, bytes, 0, bytes.Length);
 			Console.OpenStandardError ().Write (bytes, 0, bytes.Length);
 		}
+
+		public static float FloatParse (string floatNr)
+		{
+			return float.Parse (floatNr.Replace (".", ","));
+		}
     }
 }
