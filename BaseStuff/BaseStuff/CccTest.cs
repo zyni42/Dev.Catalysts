@@ -92,9 +92,9 @@ namespace BaseStuff
 			System.Buffer.BlockCopy(msg.ToCharArray(), 0, bytes, 0, bytes.Length);
 			Console.OpenStandardError ().Write (bytes, 0, bytes.Length);
 		}
-		public static void WriteResetToStandardError (string msg)
+		public static void WriteCrToStandardError (string msg)
 		{
-		//	msg += "\r";
+			msg += "\r";
 			byte[] bytes = new byte[msg.Length * sizeof(char)];
 			System.Buffer.BlockCopy(msg.ToCharArray(), 0, bytes, 0, bytes.Length);
 			Console.OpenStandardError ().Write (bytes, 0, bytes.Length);

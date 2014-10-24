@@ -126,38 +126,7 @@ namespace Autonomous_Car_Warmup
 				if (ballSteps.Length <= 0)
 					return paddleMove;
 
-				if (Distance == 10)	// We are left paddle
-				{
-					// Did the ball pass our y-line?
-					if (ballSteps[ballSteps.Length-1].Left <= Right)
-					{
-						// When did it pass us (on which step)?
-
-						// Where did it pass us (y-position)
-
-						// Can we move fast enough to bounce it?
-						// yes -> return moves to hit point
-						// no -> return moves back to middle
-					}
-				}
-				else				// We are right paddle
-				{
-					// Did the ball pass our y-line?
-					if (ballSteps[ballSteps.Length-1].Right >= Left)
-					{
-						// When did it pass us (on which step)?
-
-						// Where did it pass us (y-position)
-
-						// Can we move fast enough to bounce it?
-						// yes -> return moves to hit point
-						// no -> return moves back to middle
-					}
-				}
-
 				var lastStep = ballSteps[ballSteps.Length-1];
-
-				BaseStuff.CccTest.WriteResetToStandardError ("ESTIMATE : " + lastStep.PosY.ToString ());
 
 				bool newWay = false;
 				if (newWay) {
@@ -166,14 +135,12 @@ namespace Autonomous_Car_Warmup
 				else {
 					// ball is HIGHER than paddle
 					if (lastStep.Bottom < this.Center) { // this.Top) {
-					//	var desiredMove = lastStep.Bottom - this.Center ; // - this.Top
-						var desiredMove = lastStep.Bottom - this.Center;
+						var desiredMove = lastStep.Bottom - this.Center; // - this.Top
 						// move is < 0 (as UP)
 						paddleMove = (int) Math.Round (Math.Max (desiredMove, this.MoveMaxUp));
 					}
 					else if (lastStep.Top > this.Center) { // this.Bottom) {
-					//	var desiredMove = lastStep.Top - this.Center ; // - this.Bottom
-						var desiredMove = lastStep.Top - this.Center;
+						var desiredMove = lastStep.Top - this.Center; // - this.Bottom
 						// move is > 0 (as DOWN)
 						paddleMove = (int) Math.Round (Math.Min (desiredMove, this.MoveMaxDown));
 					}
