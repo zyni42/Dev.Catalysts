@@ -27,48 +27,93 @@ namespace CCC_21_Rathaus
 			public float	Speed;
 		}
 		
-		public class Car4 : Car2
+		public class Car6 : Car2
 		{
 			public TrafficLight TrafficLight;
 			public NextCar NextCar;
-			public Car4() { TrafficLight = new TrafficLight (); NextCar = new NextCar (); }
+			public Car6() { TrafficLight = new TrafficLight (); NextCar = new NextCar (); }
 
-			public Steering CalculateNextSteeringTl (float wantedDistance, float secondsMax)
+			public Steering CalculateNextSteeringTl6 (float wantedDistance, float secondsMax)
 			{
-				if (this.NextCar.Distance != 0 && this.NextCar.Speed != 0)
-				{
-					if (this.LimitDistanceToNext == 0 && this.LimitNext == 0)
-					{
-						//BaseStuff.CccTest.WriteLineToStandardError ("A");
-						this.LimitDistanceToNext = this.NextCar.Distance;
-						this.LimitNext = this.NextCar.Speed;
-					}
-					else
-					{
-						if (this.NextCar.Distance < this.LimitDistanceToNext)
-						{
-							//BaseStuff.CccTest.WriteLineToStandardError ("B");	
-							this.LimitDistanceToNext = this.NextCar.Distance;
-							this.LimitNext = this.NextCar.Speed;
-						}
-					}
+				//if (this.NextCar.Distance != 0 || this.NextCar.Speed != 0)
+				//{
+				//	if (this.LimitDistanceToNext == 0 && this.LimitNext == 0)
+				//	{
+				//		//BaseStuff.CccTest.WriteLineToStandardError ("A");
+				//		this.LimitDistanceToNext = this.NextCar.Distance;
+				//		this.LimitNext = this.NextCar.Speed;
+				//	}
+				//	else
+				//	{
+				//		if (this.NextCar.Distance < this.LimitDistanceToNext)
+				//		{
+				//			//BaseStuff.CccTest.WriteLineToStandardError ("B");	
+				//			this.LimitDistanceToNext = this.NextCar.Distance;
+				//			this.LimitNext = this.NextCar.Speed;
+				//		}
+				//	}
 
-				}
+				//}
 
 				var steering = base.CalculateNextSteering (wantedDistance, secondsMax);
 
+				if (this.NextCar.Distance != 0 || this.NextCar.Speed != 0)
+				{
+
+					{
+						if (this.LimitDistanceToNext == 0 && this.LimitNext == 0)
+						{
+							//BaseStuff.CccTest.WriteLineToStandardError ("A");
+							this.LimitDistanceToNext = this.NextCar.Distance;
+							this.LimitNext = this.NextCar.Speed;
+						}
+						else
+						{
+							if (this.NextCar.Distance < this.LimitDistanceToNext)
+							{
+								//BaseStuff.CccTest.WriteLineToStandardError ("B");	
+								this.LimitDistanceToNext = this.NextCar.Distance;
+								this.LimitNext = this.NextCar.Speed;
+							}
+						}
+
+					}
+
+					// NEXT LIMIT HIGHER
+					if (this.NextCar.Speed >= this.LimitCurrent || this.Speed == 0) {
+						// NOP
+					}
+					else {
+
+						// NEXT LIMIT SMALLER
+						var wantToGetSlowerKmh = this.Speed - (this.NextCar.Speed * 0.95);
+						var needSecToBrake = wantToGetSlowerKmh / Car2.MaxBreakKmHPerSec;
+						var needDistanceToBrakeMETER = needSecToBrake * this.SpeedMperSec;
+
+						// we need to brake LATER
+						if (this.NextCar.Distance > 10 && this.NextCar.Distance > needDistanceToBrakeMETER)
+							return steering;
+
+						// we need to brake NOW
+						steering.Throttle = 0;
+						steering.Brake = Steering.MaxBrake;
+					}
+				}
 				// if we DO BRAKE : no more action here
 				if (steering.Throttle == 0 && steering.Brake == Steering.MaxBrake)
 					return steering;
 
 				// NO TL
 				if (this.TrafficLight.Distance == 0) {
-					BaseStuff.CccTest.WriteLineToStandardError ("no TL");
+				//	BaseStuff.CccTest.WriteLineToStandardError ("no TL");
 					return steering;
 				}
 
 				// when do we get to the light?
-				var timeUntilTlSec = this.TrafficLight.Distance / this.SpeedMperSec;
+				var timeUntilTlSec =
+					(this.SpeedMperSec == 0)
+					? 0
+					: this.TrafficLight.Distance / this.SpeedMperSec;
 				// what is TL state ater that time?
 				if (this.TrafficLight.State == TrLightState.Green)
 				{
@@ -107,13 +152,15 @@ namespace CCC_21_Rathaus
 				//}
 
 				// TL will be non-grteen when we get there
-				var wantToGetSlowerKmh = this.Speed * 1.05f;
-				var needSecToBrake = wantToGetSlowerKmh / Car2.MaxBreakKmHPerSec;
-				var needDistanceToBrakeMETER = needSecToBrake * this.SpeedMperSec;
+				{
+					var wantToGetSlowerKmh = this.Speed * 1.05f;
+					var needSecToBrake = wantToGetSlowerKmh / Car2.MaxBreakKmHPerSec;
+					var needDistanceToBrakeMETER = needSecToBrake * this.SpeedMperSec;
 
-				// we need to brake LATER
-				if (this.TrafficLight.Distance > needDistanceToBrakeMETER) {
-					return steering;
+					// we need to brake LATER
+					if (this.TrafficLight.Distance > 5 && this.TrafficLight.Distance > needDistanceToBrakeMETER) {
+						return steering;
+					}
 				}
 
 				// we need to brake NOW
@@ -130,12 +177,16 @@ namespace CCC_21_Rathaus
 		{
 			var result = string.Empty;
 
-			var car = new Car4 ();
+			var car = new Car6 ();
 			var steering = new Steering ();
 
 			for (;;)
 			{
 				var conLine = Console.ReadLine ();
+				if (string.IsNullOrEmpty (conLine)) {
+					BaseStuff.CccTest.WriteLineToStandardError ("TERMIANTE for empty input");
+					break;
+				}
 				{
 					var speedData = BaseStuff.CccTest.SplitBySpaces (conLine);
 					if (speedData[0] != "speed") throw new Exception ("NOT speed: " + speedData[0]);
@@ -191,7 +242,7 @@ namespace CCC_21_Rathaus
 					if (updateCommand[0] != "update") throw new Exception ("NOT update: " + updateCommand[0]);
 				}
 
-				steering = car.CalculateNextSteeringTl (1500, 100);
+				steering = car.CalculateNextSteeringTl6 (1500, 100);
 
 			//	steering.Throttle = 100;
 			//	steering.Brake = 1;

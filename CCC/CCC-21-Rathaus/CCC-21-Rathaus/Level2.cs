@@ -16,6 +16,7 @@ namespace CCC_21_Rathaus
 			public float LimitDistanceToNext;
 			public float LimitNext;
 			public float SpeedMperSec { get { return Speed / 3.6f; } }
+			public float CalcSpeedMperSec (float speedKmPerH) { return speedKmPerH / 3.6f; }
 
 			public static float MaxBreakKmHPer6Steps = 2.1f;
 			public static float MaxBreakKmHPerSec    = 21.0f;
@@ -51,7 +52,7 @@ namespace CCC_21_Rathaus
 					return steering;
 
 				// NEXT LIMIT HIGHER
-				if (this.LimitNext >= this.LimitCurrent)
+				if (this.LimitNext >= this.LimitCurrent || this.Speed == 0)
 					return steering;
 
 				// NEXT LIMIT SMALLER
@@ -60,7 +61,7 @@ namespace CCC_21_Rathaus
 				var needDistanceToBrakeMETER = needSecToBrake * this.SpeedMperSec;
 
 				// we need to brake LATER
-				if (this.LimitDistanceToNext > needDistanceToBrakeMETER)
+				if (this.LimitDistanceToNext > 10 && this.LimitDistanceToNext > needDistanceToBrakeMETER)
 					return steering;
 
 				// we need to brake NOW
