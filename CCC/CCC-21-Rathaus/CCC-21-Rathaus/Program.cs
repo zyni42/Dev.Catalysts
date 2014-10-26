@@ -16,7 +16,20 @@ namespace CCC_21_Rathaus
 
 		static void Main(string[] args)
 		{
-			var lvlResult = DoLevel6 ();
+			string [] lvlResult;
+			var cl = args.Length > 0 ? args[0] : "0";
+			var clInt = int.Parse (cl);
+			BaseStuff.CccTest.WriteLineToStandardError (string.Format ("command line : {0} ==> {1}", cl, clInt));
+			switch (clInt) {
+				case 1: lvlResult = DoLevel1 (); break;
+				case 2: lvlResult = DoLevel2 (); break;
+				case 3: lvlResult = DoLevel3 (); break;
+				case 4: lvlResult = DoLevel4 (); break;
+				case 5: lvlResult = DoLevel5 (); break;
+				case 6: lvlResult = DoLevel6 (); break;
+//				case 7: lvlResult = DoLevel7 (); break;
+				default: throw new Exception (string.Format ("unsupported LEVEL [ {0} ==> {1} ]", cl, clInt));
+			}
 		}
 
 		static string[] DoLevel1 ()

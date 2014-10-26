@@ -180,6 +180,7 @@ namespace CCC_21_Rathaus
 			var car = new Car6 ();
 			var steering = new Steering ();
 
+			BaseStuff.CccTest.WriteLineToStandardError (string.Format ("running : {0}", this));
 			for (;;)
 			{
 				var conLine = Console.ReadLine ();
@@ -191,32 +192,36 @@ namespace CCC_21_Rathaus
 					var speedData = BaseStuff.CccTest.SplitBySpaces (conLine);
 					if (speedData[0] != "speed") throw new Exception ("NOT speed: " + speedData[0]);
 					car.Speed = BaseStuff.CccTest.FloatParse (speedData[1]);
+					conLine = null;
 				}
 
-				conLine = Console.ReadLine ();
+				if (conLine == null) conLine = Console.ReadLine ();
 				{
 					var distData = BaseStuff.CccTest.SplitBySpaces (conLine);
 					if (distData[0] != "distance") throw new Exception ("NOT distance: " + distData[0]);
 					car.Distance = BaseStuff.CccTest.FloatParse (distData[1]);
+					conLine = null;
 				}
 
-				conLine = Console.ReadLine ();
+				if (conLine == null) conLine = Console.ReadLine ();
 				{
 					var timeData = BaseStuff.CccTest.SplitBySpaces (conLine);
 					if (timeData[0] != "time") throw new Exception ("NOT time: " + timeData[0]);
 					car.Time = BaseStuff.CccTest.FloatParse (timeData[1]);
+					conLine = null;
 				}
 
-				conLine = Console.ReadLine ();
+				if (conLine == null) conLine = Console.ReadLine ();
 				{
 					var limitData = BaseStuff.CccTest.SplitBySpaces (conLine);
 					if (limitData[0] != "speedlimit") throw new Exception ("NOT speedlimit: " + limitData[0]);
 					car.LimitCurrent = BaseStuff.CccTest.FloatParse (limitData[1]);
 					car.LimitDistanceToNext = BaseStuff.CccTest.FloatParse (limitData[2]);
 					car.LimitNext= BaseStuff.CccTest.FloatParse (limitData[3]);
+					conLine = null;
 				}
 
-				conLine = Console.ReadLine ();
+				if (conLine == null) conLine = Console.ReadLine ();
 				{
 					var trafficlightData = BaseStuff.CccTest.SplitBySpaces (conLine);
 					if (trafficlightData[0] != "trafficlight") throw new Exception ("NOT trafficlight: " + trafficlightData[0]);
@@ -225,21 +230,34 @@ namespace CCC_21_Rathaus
 						car.TrafficLight.State =  (TrLightState)(Enum.Parse (typeof (TrLightState), trafficlightData[2]));
 						car.TrafficLight.RemainingTime = BaseStuff.CccTest.FloatParse (trafficlightData[3]);
 					}
+					conLine = null;
 				}
 
-				conLine = Console.ReadLine ();
+				if (conLine == null) conLine = Console.ReadLine ();
 				{
 					var nextCarData = BaseStuff.CccTest.SplitBySpaces (conLine);
 					if (nextCarData[0] != "nextcar") throw new Exception ("NOT nextcar: " + nextCarData[0]);
 					car.NextCar.Distance = BaseStuff.CccTest.FloatParse (nextCarData[1]);
 					car.NextCar.Speed = BaseStuff.CccTest.FloatParse (nextCarData[2]);
+					conLine = null;
+					//if (nextCarData[0] == "nextcar") {
+					//	car.NextCar.Distance = BaseStuff.CccTest.FloatParse (nextCarData[1]);
+					//	car.NextCar.Speed = BaseStuff.CccTest.FloatParse (nextCarData[2]);
+					//	conLine = null;
+					//}
+					//else {
+					//	car.NextCar.Distance = 0;
+					//	car.NextCar.Speed = 0;
+					//	// NOT EXECUTING "conLine = null;" because we did NOT use it, it still needs to be parsed
+					//}
 				}
 
-				conLine = Console.ReadLine ();
+				if (conLine == null) conLine = Console.ReadLine ();
 			//	BaseStuff.CccTest.WriteLineToStandardError ("IN  : " + conLine);
 				{
 					var updateCommand = BaseStuff.CccTest.SplitBySpaces (conLine);
 					if (updateCommand[0] != "update") throw new Exception ("NOT update: " + updateCommand[0]);
+					conLine = null;
 				}
 
 				steering = car.CalculateNextSteeringTl6 (1500, 100);

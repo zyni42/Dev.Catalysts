@@ -109,9 +109,14 @@ namespace CCC_21_Rathaus
 			var car = new Car5 ();
 			var steering = new Steering ();
 
+			BaseStuff.CccTest.WriteLineToStandardError (string.Format ("running : {0}", this));
 			for (;;)
 			{
 				var conLine = Console.ReadLine ();
+				if (string.IsNullOrEmpty (conLine)) {
+					BaseStuff.CccTest.WriteLineToStandardError ("TERMIANTE for empty input");
+					break;
+				}
 				{
 					var speedData = BaseStuff.CccTest.SplitBySpaces (conLine);
 					if (speedData[0] != "speed") throw new Exception ("NOT speed: " + speedData[0]);
