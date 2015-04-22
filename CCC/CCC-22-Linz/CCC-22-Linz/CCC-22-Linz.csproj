@@ -65,6 +65,16 @@
     <None Include="app.config" />
     <None Include="run.bat" />
   </ItemGroup>
+  <ItemGroup>
+    <None Include="Level1\empty" />
+    <None Include="Level2\empty" />
+    <None Include="Level3\empty" />
+    <None Include="Level4\empty" />
+    <None Include="Level5\empty" />
+    <None Include="Level6\empty" />
+    <None Include="Level7\empty" />
+  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
