@@ -17,6 +17,8 @@ namespace Autonomous_Car_Warmup
 
 		static void Main(string[] args)
 		{
+			//System.Windows.Forms.MessageBox.Show ("Waiting for debugger? ;-)");
+
 			var lvl1Result = DoLevel1 ();
 		}
 
