@@ -23,11 +23,11 @@ set SPEED=1
 IF NOT "%1" == "" set LEVEL=level%1.in
 IF NOT "%2" == "" set SPEED=%2
 
-cd bin\debug
+REM cd bin\debug
 
-ECHO java  -jar simulator.jar --exec="CCC-21-Rathaus.exe %1" --level=%LEVEL% --speed=%SPEED%
-     java  -jar simulator.jar --exec="CCC-21-Rathaus.exe %1" --level=%LEVEL% --speed=%SPEED%
+ECHO java  -jar simulator.jar --exec="bin\debug\CCC-21-Rathaus.exe %1" --level=Level%1\%LEVEL% --speed=%SPEED%
+     java  -jar simulator.jar --exec="bin\debug\CCC-21-Rathaus.exe %1" --level=Level%1\%LEVEL% --speed=%SPEED%
 
-cd ..\..
+REM cd ..\..
 
 :END
