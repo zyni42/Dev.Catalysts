@@ -9,6 +9,8 @@ namespace CCC_22_Linz
 	{
 		static void Main(string[] args)
 		{
+			//System.Windows.Forms.MessageBox.Show ("Waiting for Debugger...");
+
 			var cl = args.Length > 0 ? args[0] : "0";
 			var clInt = int.Parse (cl);
 			BaseStuff.CccTest.WriteLineToStandardError (string.Format ("command line : {0} ==> {1}", cl, clInt));
