@@ -6,8 +6,13 @@ using System.Threading.Tasks;
 
 namespace BaseStuff
 {
-	public interface ICccLevel<T>
+	public interface ICccLevel
 	{
-		T CalculateResult ();
+		void CalculateResult ();
+	}
+
+	public interface ICccLevel<T> : ICccLevel
+	{
+		new T CalculateResult ();
 	}
 }
