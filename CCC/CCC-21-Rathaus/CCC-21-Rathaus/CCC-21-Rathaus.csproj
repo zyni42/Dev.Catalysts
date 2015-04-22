@@ -52,24 +52,6 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
-    <None Include="Level1\description-level1.pdf" />
-    <None Include="Level1\input-level1.zip" />
-    <None Include="Level1\level1.in" />
-    <None Include="Level2\description-level2.pdf" />
-    <None Include="Level2\input-level2.zip" />
-    <None Include="Level2\level2.in" />
-    <None Include="Level3\description-level3.pdf" />
-    <None Include="Level3\input-level3.zip" />
-    <None Include="Level3\level3.in" />
-    <None Include="Level4\description-level4.pdf" />
-    <None Include="Level4\input-level4.zip" />
-    <None Include="Level4\level4.in" />
-    <None Include="Level5\description-level5.pdf" />
-    <None Include="Level5\input-level5.zip" />
-    <None Include="Level5\level5.in" />
-    <None Include="Level6\description-level6.pdf" />
-    <None Include="Level6\input-level6.zip" />
-    <None Include="Level6\level6.in" />
     <None Include="run.bat" />
   </ItemGroup>
   <ItemGroup>
@@ -77,15 +59,6 @@
       <Project>{03babf37-fa46-438d-8f8b-deb3da2e5af6}</Project>
       <Name>BaseStuff</Name>
     </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Level1\result_1.txt" />
-    <Content Include="Level2\result_2.txt" />
-    <Content Include="Level3\result_3.txt" />
-    <Content Include="Level4\result_4.txt" />
-    <Content Include="Level5\result_5.txt" />
-    <Content Include="Level6\result_6.txt" />
-    <Content Include="simulator.jar" />
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
