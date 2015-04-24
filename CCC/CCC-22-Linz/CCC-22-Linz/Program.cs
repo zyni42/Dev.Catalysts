@@ -16,8 +16,8 @@ namespace CCC_22_Linz
 			BaseStuff.CccTest.WriteLineToStandardError (string.Format ("command line : {0} ==> {1}", cl, clInt));
 			switch (clInt) {
 				case 1: DoLevel1 (); break;
-				//case 2: DoLevel2 (); break;
-				//case 3: DoLevel3 (); break;
+				case 2: DoLevel2 (); break;
+				case 3: DoLevel3 (); break;
 				//case 4: DoLevel4 (); break;
 				//case 5: DoLevel5 (); break;
 				//case 6: DoLevel6 (); break;

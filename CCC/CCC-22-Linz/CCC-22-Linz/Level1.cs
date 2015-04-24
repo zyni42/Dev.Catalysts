@@ -8,7 +8,7 @@ namespace CCC_22_Linz
 {
 	class Level1 : BaseStuff.ICccLevel
 	{
-		class Rod
+		public class Rod
 		{
 			public void Store ()
 			{
@@ -33,7 +33,7 @@ namespace CCC_22_Linz
 			}
 		}
 
-		class HotDoc
+		public class HotDoc
 		{
 			public HotDoc (int numRods)
 			{
