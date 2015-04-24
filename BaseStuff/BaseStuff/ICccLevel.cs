@@ -13,6 +13,6 @@ namespace BaseStuff
 
 	public interface ICccLevel<T>
 	{
-		new T CalculateResult ();
+		T CalculateResult ();
 	}
 }
