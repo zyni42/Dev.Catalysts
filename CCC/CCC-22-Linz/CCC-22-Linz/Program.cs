@@ -9,6 +9,7 @@ namespace CCC_22_Linz
 	{
 		static void Main(string[] args)
 		{
+
 			//System.Windows.Forms.MessageBox.Show ("Waiting for Debugger...");
 
 			var cl = args.Length > 0 ? args[0] : "0";
@@ -18,7 +19,7 @@ namespace CCC_22_Linz
 				case 1: DoLevel1 (); break;
 				case 2: DoLevel2 (); break;
 				case 3: DoLevel3 (); break;
-				//case 4: DoLevel4 (); break;
+				case 4: DoLevel4 (); break;
 				//case 5: DoLevel5 (); break;
 				//case 6: DoLevel6 (); break;
 				//case 7: DoLevel7 (); break;
