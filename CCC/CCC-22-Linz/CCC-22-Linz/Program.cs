@@ -14,13 +14,15 @@ namespace CCC_22_Linz
 
 			var cl = args.Length > 0 ? args[0] : "0";
 			var clInt = int.Parse (cl);
+			bool talk = (args.Length >= 2);
 			BaseStuff.CccTest.WriteLineToStandardError (string.Format ("command line : {0} ==> {1}", cl, clInt));
+
 			switch (clInt) {
 				case 1: DoLevel1 (); break;
 				case 2: DoLevel2 (); break;
 				case 3: DoLevel3 (); break;
 				case 4: DoLevel4 (); break;
-				//case 5: DoLevel5 (); break;
+				case 5: DoLevel5 (talk); break;
 				//case 6: DoLevel6 (); break;
 				//case 7: DoLevel7 (); break;
 				default: throw new Exception (string.Format ("unsupported LEVEL [ {0} ==> {1} ]", cl, clInt));
@@ -50,9 +52,9 @@ namespace CCC_22_Linz
 			lvl4.CalculateResult ();
 		}
 
-		static void DoLevel5 ()
+		static void DoLevel5 (bool talk)
 		{
-			Level5 lvl5 = new Level5 ();
+			Level5 lvl5 = new Level5 (talk);
 			lvl5.CalculateResult ();
 		}
 

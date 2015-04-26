@@ -60,9 +60,17 @@ namespace CCC_22_Linz
 
 			public string GenerateCommand ()
 			{
+				string docString;
+				return GenerateCommand (out docString);
+			}
+			public string GenerateCommand (out string docString)
+			{
+				var limitDoc = 12;
 				StringBuilder stb = new StringBuilder ();
-				for (int rX = 0; rX < _rX; rX++) {
-					for (int rY = 0; rY < _rY; rY++) {
+				StringBuilder doc = new StringBuilder ();
+				for (int rY = 0; rY < _rY; rY++) {
+					if (rY < limitDoc) doc.Append (Environment.NewLine);
+					for (int rX = 0; rX < _rX; rX++) {
 						bool mustLift     =  Rods[rX,rY].Lifted;
 						bool mustDeviateX = (Rods[rX,rY].DeviationX != Rods[rX,rY].Old_deviationX);
 						bool mustDeviateY = (Rods[rX,rY].DeviationY != Rods[rX,rY].Old_deviationY);
@@ -70,6 +78,10 @@ namespace CCC_22_Linz
 						if (mustDeviateX || mustDeviateY || mustLift) {
 							var l = string.Format (" {0} {1} {2} {3}", rX+1, rY+1, Rods[rX,rY].DeviationX, Rods[rX,rY].DeviationY);
 							stb.Append (l);
+							if (rY < limitDoc) doc.Append ("X");
+						}
+						else {
+							if (rY < limitDoc) doc.Append (".");
 						}
 						Rods[rX,rY].Store ();
 					}
@@ -77,6 +89,7 @@ namespace CCC_22_Linz
 				if (stb.Length > 0)
 					stb.Insert (0, "MOVE");
 
+				docString = doc.ToString ();
 				return stb.ToString ();
 			}
 
