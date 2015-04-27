@@ -29,6 +29,8 @@ namespace CCC_22_Linz
 #if true
 			hotDoc.MoveAny (200,  40);
 //			MessageBox.Show ("öj");
+			hotDoc.Circle ( 44);
+			hotDoc.Circle (100);
 			hotDoc.Circle (144);
 #else
 			hotDoc.MoveAny (400, 200);
@@ -52,6 +54,51 @@ namespace CCC_22_Linz
 			{
 			}
 
+			public class Shape {
+				public class Point {
+					public float X;
+					public float Y;
+				}
+				public Point [] Points ;
+
+				public int minX, minY, maxX, maxY;
+
+				public Shape (string answerTo_get_shape, int _rX, int _rY) {
+					Points = new Point [4];
+					var shapeTxt = answerTo_get_shape.Split (new string [] {" "}, StringSplitOptions.RemoveEmptyEntries);
+					BaseStuff.CccTest.WriteLineToStandardError (string.Format ("SPAPE    : SHAPESTRING [{0}]", answerTo_get_shape));
+					maxX = int.MinValue;	minX = int.MaxValue;
+					maxY = int.MinValue;	minY = int.MaxValue;
+					for (int i = 0; i < Points.Length; i++) {
+						Points[i] = new Point ();
+						Points[i].X = float.Parse (shapeTxt[2*i+0].Replace (".",","));
+						Points[i].Y = float.Parse (shapeTxt[2*i+1].Replace (".",","));
+						maxX = (int)Math.Max (Points[i].X, maxX);	minX = (int)Math.Min (Points[i].X, minX);
+						maxY = (int)Math.Max (Points[i].Y, maxY);	minY = (int)Math.Min (Points[i].Y, minY);
+					}
+					minX = Math.Max (minX, 0);
+					minY = Math.Max (minY, 0);
+					maxX = Math.Min (maxX, _rX * 10);
+					maxY = Math.Min (maxY, _rY * 10);
+					BaseStuff.CccTest.WriteLineToStandardError (string.Format ("SHAPE    : coords  : X [{0,3}..{1,3}], Y [{2,3}...{3,3}]", minX, maxX, minY, maxY));
+
+					minX /= 10;
+//					maxX = (maxX + 9) / 10;
+					maxX = (maxX + 19) / 10;
+//					maxX = (maxX     ) / 10;
+
+					minY /= 10;
+//					maxY = (maxY + 9) / 10;
+					maxY = (maxY + 19) / 10;
+//					maxY = (maxY     ) / 10;
+
+					maxX = Math.Min (maxX, _rX);
+					maxY = Math.Min (maxY, _rY);
+
+					BaseStuff.CccTest.WriteLineToStandardError (string.Format ("SHAPE    : offsets : X [{0,3}..{1,3}], Y [{2,3}...{3,3}]", minX, maxX, minY, maxY));
+				}
+			}
+
 			public void Circle (/*float cX, float cY, */int numSteps)
 			{
 				bool talk = Talk;
@@ -70,24 +117,9 @@ namespace CCC_22_Linz
 
 				for (int step = 0; step < numSteps; step ++)
 				{
-					//Console.WriteLine ("GET_POSITION");
-					//var posTxts = Console.ReadLine ().Split (new string [] {" "}, StringSplitOptions.RemoveEmptyEntries);
-					//var posX = float.Parse (posTxts[0]);
-					//var posY = float.Parse (posTxts[1]);
-
-					//BaseStuff.CccTest.WriteLineToStandardError (string.Format ("POS  :: {0} {1}", posY, posY));
-
-					//int stillToGoX = (int)((int)(toX) - posX);
-					//int stillToGoY = (int)((int)(toY) - posY);
-
-					//if (stillToGoX > 0) stillToGoX = Math.Min (stillToGoX, 5); else stillToGoX = Math.Max (stillToGoX, -5);
-					//if (stillToGoY > 0) stillToGoY = Math.Min (stillToGoY, 5); else stillToGoY = Math.Max (stillToGoY, -5);
-
-					//if (stillToGoX == 0 && stillToGoY == 0)
-					//	break;
 
 					if (step == 5) {
-						int i = step * 9;
+						int i = step * 9; // just to be able to set a breakpoint
 					}
 
 					Console.WriteLine ("GET_SHAPE");
@@ -96,37 +128,8 @@ namespace CCC_22_Linz
 						BaseStuff.CccTest.WriteLineToStandardError (string.Format ("CIRCLE   : EMPTY INPUT -> QUIT"));
 						return;
 					}
-					var shapeTxt = shapeString.Split (new string [] {" "}, StringSplitOptions.RemoveEmptyEntries);
-					BaseStuff.CccTest.WriteLineToStandardError (string.Format ("CIRCLE   : SHAPESTRING [{0}]", shapeString));
-					int [] sX = new int [4];
-					int [] sY = new int [4];
-					int maxX = int.MinValue;
-					int minX = int.MaxValue;
-					int maxY = int.MinValue;
-					int minY = int.MaxValue;
-					for (int i = 0; i < sX.Length; i++) {
-						sX[i] = (int)float.Parse (shapeTxt[2*i+0].Replace (".",","));
-						sY[i] = (int)float.Parse (shapeTxt[2*i+1].Replace (".",","));
-						maxX = Math.Max (sX[i], maxX);	minX = Math.Min (sX[i], minX);
-						maxY = Math.Max (sY[i], maxY);	minY = Math.Min (sY[i], minY);
-					}
-					minX = Math.Max (minX, 0);
-					minY = Math.Max (minY, 0);
-					maxX = Math.Min (maxX, _rX * 10);
-					maxY = Math.Min (maxY, _rY * 10);
-					BaseStuff.CccTest.WriteLineToStandardError (string.Format ("CIRCLE   : coords  : X [{0,3}..{1,3}], Y [{2,3}...{3,3}]", minX, maxX, minY, maxY));
 
-					minX /= 10;
-//					maxX = (maxX + 9) / 10;
-					maxX = (maxX + 19) / 10;
-//					maxX = (maxX     ) / 10;
-
-					minY /= 10;
-//					maxY = (maxY + 9) / 10;
-					maxY = (maxY + 19) / 10;
-//					maxY = (maxY     ) / 10;
-
-					BaseStuff.CccTest.WriteLineToStandardError (string.Format ("CIRCLE   : offsets : X [{0,3}..{1,3}], Y [{2,3}...{3,3}]", minX, maxX, minY, maxY));
+					var shape = new HotDoc5.Shape (shapeString, _rX, _rY);
 
 					const int factor = 5;
 
@@ -150,8 +153,8 @@ namespace CCC_22_Linz
 							case 0: {
 								for (int rX = 0; rX < _rX; rX++) {
 									for (int rY = 0; rY < _rY; rY++) {
-										if (rX < minX || rX > maxX ||
-											rY < minY || rY > maxY) {
+										if (rX < shape.minX || rX > shape.maxX ||
+											rY < shape.minY || rY > shape.maxY) {
 											this.Rods[rX,rY].Lifted = false;
 											this.Rods[rX,rY].DeviationX = 0;
 											this.Rods[rX,rY].DeviationY = 0;
@@ -172,8 +175,8 @@ namespace CCC_22_Linz
 							case 1: {
 							//	for (int rX = 0; rX < _rX; rX++) {
 							//		for (int rY = 0; rY < _rY; rY++) {
-								for (int rX = minX; rX < maxX; rX++) {
-									for (int rY = minY; rY < maxY; rY++) {
+								for (int rX = shape.minX; rX < shape.maxX; rX++) {
+									for (int rY = shape.minY; rY < shape.maxY; rY++) {
 										if (this.Rods[rX,rY].GroupB) {
 											this.Rods[rX,rY].DeviationX = stillToGoX;
 											this.Rods[rX,rY].DeviationY = stillToGoY;
@@ -186,8 +189,8 @@ namespace CCC_22_Linz
 							case 2: {
 							//	for (int rX = 0; rX < _rX; rX++) {
 							//		for (int rY = 0; rY < _rY; rY++) {
-								for (int rX = minX; rX < maxX; rX++) {
-									for (int rY = minY; rY < maxY; rY++) {
+								for (int rX = shape.minX; rX < shape.maxX; rX++) {
+									for (int rY = shape.minY; rY < shape.maxY; rY++) {
 										if (this.Rods[rX,rY].GroupA) {
 											this.Rods[rX,rY].Lifted = true;
 										}
@@ -199,8 +202,8 @@ namespace CCC_22_Linz
 							case 3: {
 							//	for (int rX = 0; rX < _rX; rX++) {
 							//		for (int rY = 0; rY < _rY; rY++) {
-								for (int rX = minX; rX < maxX; rX++) {
-									for (int rY = minY; rY < maxY; rY++) {
+								for (int rX = shape.minX; rX < shape.maxX; rX++) {
+									for (int rY = shape.minY; rY < shape.maxY; rY++) {
 										if (this.Rods[rX,rY].GroupB) {
 											this.Rods[rX,rY].Lifted = false;
 										}
@@ -212,8 +215,8 @@ namespace CCC_22_Linz
 							case 4: {
 							//	for (int rX = 0; rX < _rX; rX++) {
 							//		for (int rY = 0; rY < _rY; rY++) {
-								for (int rX = minX; rX < maxX; rX++) {
-									for (int rY = minY; rY < maxY; rY++) {
+								for (int rX = shape.minX; rX < shape.maxX; rX++) {
+									for (int rY = shape.minY; rY < shape.maxY; rY++) {
 										if (this.Rods[rX,rY].GroupB) {
 											this.Rods[rX,rY].Lifted = true;
 											this.Rods[rX,rY].DeviationX = 0;
@@ -227,8 +230,8 @@ namespace CCC_22_Linz
 							//case 5: {
 							////	for (int rX = 0; rX < _rX; rX++) {
 							////		for (int rY = 0; rY < _rY; rY++) {
-							//	for (int rX = minX; rX < maxX; rX++) {
-							//		for (int rY = minY; rY < maxY; rY++) {
+							//	for (int rX = shape.minX; rX < shape.maxX; rX++) {
+							//		for (int rY = shape.minY; rY < shape.maxY; rY++) {
 							//			this.Rods[rX,rY].Lifted = false;
 							//			this.Rods[rX,rY].DeviationX = 0;
 							//			this.Rods[rX,rY].DeviationY = 0;
