@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 14
+VisualStudioVersion = 14.0.23107.0
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CCC-23-Rathaus", "CCC-23-Rathaus\CCC-23-Rathaus.csproj", "{49E6EC32-145B-43B4-8169-5C1BB55A79B4}"
+	ProjectSection(ProjectDependencies) = postProject
+		{03BABF37-FA46-438D-8F8B-DEB3DA2E5AF6} = {03BABF37-FA46-438D-8F8B-DEB3DA2E5AF6}
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BaseStuff", "..\..\BaseStuff\BaseStuff\BaseStuff.csproj", "{03BABF37-FA46-438D-8F8B-DEB3DA2E5AF6}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{49E6EC32-145B-43B4-8169-5C1BB55A79B4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{49E6EC32-145B-43B4-8169-5C1BB55A79B4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{49E6EC32-145B-43B4-8169-5C1BB55A79B4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{49E6EC32-145B-43B4-8169-5C1BB55A79B4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{03BABF37-FA46-438D-8F8B-DEB3DA2E5AF6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{03BABF37-FA46-438D-8F8B-DEB3DA2E5AF6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{03BABF37-FA46-438D-8F8B-DEB3DA2E5AF6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{03BABF37-FA46-438D-8F8B-DEB3DA2E5AF6}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
