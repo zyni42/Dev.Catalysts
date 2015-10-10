@@ -181,3 +181,7 @@ UpgradeLog*.htm
 
 # Microsoft Fakes
 FakesAssemblies/
+
+# CCC specific intermediate stuff
+CCC/CCC-21-Rathaus/CCC-21-Rathaus/result.txt
+CCC/CCC-22-Linz/CCC-22-Linz/*.out
