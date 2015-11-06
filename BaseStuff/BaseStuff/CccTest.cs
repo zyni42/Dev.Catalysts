@@ -25,6 +25,21 @@ namespace BaseStuff
 			return splittedLines;
 		}
 
+		public static List<string[]> ReadInputFileByComma (string inputFile)
+		{
+			var sr = File.OpenText (inputFile);
+			var inputFileContent = sr.ReadToEnd ();
+			sr.Close ();
+
+			var lines = inputFileContent.Split (new string [] { "\r", "\n" }, StringSplitOptions.RemoveEmptyEntries);
+			List<string[]> splittedLines = new List<string[]> (lines.Length);
+			
+			for (int i = 0; i < lines.Length; i++)
+				splittedLines.Add (lines[i].Split (new char [] {','}, StringSplitOptions.RemoveEmptyEntries));
+			
+			return splittedLines;
+		}
+
 		public static string[] SplitBySpaces (string input)
 		{
 			return input.Split (new char [] {' '}, StringSplitOptions.RemoveEmptyEntries);
@@ -32,7 +47,8 @@ namespace BaseStuff
 
 		public static void CreateResultTxtFile (string file, string result)
 		{
-			if (!Directory.Exists (Path.GetDirectoryName(file))) Directory.CreateDirectory (Path.GetDirectoryName(file));
+			try { if (!Directory.Exists (Path.GetDirectoryName(file))) Directory.CreateDirectory (Path.GetDirectoryName(file)); }
+			catch { }
 
 			var sw = File.CreateText (file);
 			sw.Write (result);

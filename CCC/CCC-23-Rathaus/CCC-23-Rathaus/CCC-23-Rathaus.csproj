@@ -43,12 +43,22 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Car1.cs" />
+    <Compile Include="Class2.cs" />
+    <Compile Include="Class1.cs" />
+    <Compile Include="Class1a.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
     <None Include="run.bat" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\BaseStuff\BaseStuff\BaseStuff.csproj">
+      <Project>{03babf37-fa46-438d-8f8b-deb3da2e5af6}</Project>
+      <Name>BaseStuff</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
