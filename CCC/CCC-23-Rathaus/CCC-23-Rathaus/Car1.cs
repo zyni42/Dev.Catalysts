@@ -9,6 +9,7 @@ namespace CCC_23_Rathaus
 	public class Car1
 	{
 		static int s_carNum = 0;
+		public static void ResetCarNames () { s_carNum = 0; }
 		public Car1 () { CarName = s_carNum++; }
 		public int CarName = -1;
 		public int FromSegmet;

@@ -40,36 +40,24 @@ namespace CCC_23_Rathaus
 				cars[i] = car;
 			}
 
-			for (;;) {
-				//for (int c = 0; c < cars.Length; c++) {
-				//	var car = cars[c];
-				//	if (car.CurrentSegmet == car.ToSegmet) {
-				//		car.NumSteps++;
-				//		road[car.CurrentSegmet] = null;
-				//		car.CurrentSegmet = -2;
-				//	}
-				//	else if (car.CurrentSegmet == -1) {
-				//		if (                      road[car.FromSegmet  ] != null) continue;
-				//		if (car.FromSegmet > 0 && road[car.FromSegmet-1] != null) continue;
-				//		car.CurrentSegmet = car.FromSegmet;
-				//		car.NumSteps++;
-				//		road[car.CurrentSegmet] = car;
-				//	}
-				//}
+			int width = 1 + (int)Math.Log10 (cars.Length);
+			string carFmtString = "{0," + width.ToString () + "}|";
+			string emtpyString  = string.Format (carFmtString, string.Empty);
 
+			for (int currStep = 0; ; currStep++) {
 
 				for (int q = 0; q < cars.Length; q++) {
 					cars[q].Used = false;
 				}
 
 				int carsActive = 0;
-				Console.Write ("{0,3} : |", cars[3].NumSteps);
+				Console.Write ("{0,3} : |", currStep);
 				for (int s = 0; s < road.Length; s++) {
 					if (road [s] == null) {
-						Console.Write ("  |");
+						Console.Write (emtpyString);
 					}
 					else {
-						Console.Write ("{0,2}|", road[s].CarName);
+						Console.Write (carFmtString, road[s].CarName);
 					}
 				}
 
