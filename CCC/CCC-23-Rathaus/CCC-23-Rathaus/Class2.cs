@@ -18,6 +18,10 @@ namespace CCC_23_Rathaus
 		}
 		public void CalculateResult ()
 		{
+			CalculateResult (null);
+		}
+		public void CalculateResult (Vis.CCC23RathausView viewer)
+		{
 			var line = lines [0];
 			var countSegments = int.Parse (line[0]);
 
@@ -25,7 +29,8 @@ namespace CCC_23_Rathaus
 			var countCars = int.Parse (line[0]);
 
 			var cars = new Car1 [countCars];
-			var road = new Car1 [countSegments];
+			var road = new Road (countSegments);
+
 
 			for (int i = 0; i < countCars; i++) {
 				int offset = i + 2;
@@ -40,7 +45,11 @@ namespace CCC_23_Rathaus
 				cars[i] = car;
 			}
 
-			int width = 1 + (int)Math.Log10 (cars.Length);
+			if (viewer != null) {
+				viewer.Init (cars, road, inFileName);
+			}
+
+			int width = 1 + (int)Math.Log10 (cars.Length - 1);
 			string carFmtString = "{0," + width.ToString () + "}|";
 			string emtpyString  = string.Format (carFmtString, string.Empty);
 
@@ -51,8 +60,12 @@ namespace CCC_23_Rathaus
 				}
 
 				int carsActive = 0;
+				if (viewer != null) {
+					viewer.ShowData (road);
+					System.Threading.Thread.Sleep (50);
+				}
 				Console.Write ("{0,3} : |", currStep);
-				for (int s = 0; s < road.Length; s++) {
+				for (int s = 0; s < road.CountSegments; s++) {
 					if (road [s] == null) {
 						Console.Write (emtpyString);
 					}
@@ -86,7 +99,7 @@ namespace CCC_23_Rathaus
 					}
 				}
 
-				for (int s = 0; s < road.Length; s++) {
+				for (int s = 0; s < road.CountSegments; s++) {
 					if (road[s  ] == null) {
 					}
 					else {
@@ -104,12 +117,17 @@ namespace CCC_23_Rathaus
 								carsActive++;
 								if (car.NumSteps >= car.StartTimeStep) {
 									// versuche, zu fahren
-									if (s < road.Length && road [s + 1] == null) {
+									if (s < road.CountSegments && road [s + 1] == null) {
 										// fahren
 										road[s  ] = null;
 										road[s+1] = car;
 										car.CurrentSegmet = s+1;
+										car.Waiting = false;
 										carsActive++;
+									}
+									else {
+										// warten
+										car.Waiting = true;
 									}
 								}
 							}

@@ -35,6 +35,8 @@
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -49,6 +51,13 @@
     <Compile Include="Class1a.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Road.cs" />
+    <Compile Include="Vis\CCC23RathausView.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Vis\CCC23RathausView.Designer.cs">
+      <DependentUpon>CCC23RathausView.cs</DependentUpon>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
@@ -59,6 +68,11 @@
       <Project>{03babf37-fa46-438d-8f8b-deb3da2e5af6}</Project>
       <Name>BaseStuff</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Vis\CCC23RathausView.resx">
+      <DependentUpon>CCC23RathausView.cs</DependentUpon>
+    </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
