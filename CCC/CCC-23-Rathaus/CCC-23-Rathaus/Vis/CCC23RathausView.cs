@@ -1,4 +1,5 @@
-﻿using System;
+﻿#define MATCH_VIRT_DESKTOP
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -31,14 +32,41 @@ namespace CCC_23_Rathaus.Vis
 		public void Init (Car1 [] carArray, Road road, string title)
 		{
 			var rndSource = new Random (Environment.TickCount);
+			long dehnung = ( 0x100 * 3 ) / carArray.Length;
 			foreach (var car in carArray) {
 //				int raw = ( car.CarNum * 97 ) % 0x1000000;
 //				int r = ( raw <<  0 ) & 0xFF ;
 //				int g = ( raw <<  8 ) & 0xFF ;
 //				int b = ( raw << 16 ) & 0xFF ;
 				int r = 0; // rndSource.Next (0, 255);
-				int g = rndSource.Next (0, 255);
-				int b = rndSource.Next (0, 255);
+				int g = 0;
+				int b = 0;
+				if (true) {
+					//Console.WriteLine ("max {0,3} = {0:X}", 0x300);
+					long idx = car.CarNum * dehnung;
+					//Console.Write ("{0,3} --> {1,6}", car.CarNum, idx);
+					if (idx < 0x100) {
+						idx = idx / 1;
+						g = (int)(idx % 0x100);
+						//Console.Write (" [0x100] --> g={0,3} b=***", g);
+					}
+					else if (idx < 0x200) {
+						idx = idx / 2;
+						b = (int)(idx % 0x100);
+						//Console.Write (" [0x200] --> g=*** b={0,3}", b);
+					}
+					else {
+						idx = idx / 3;
+						g = (int)(idx % 0x100);
+						b = (int)(idx % 0x100);
+						//Console.Write (" [else ] --> g={0,3} b={1,3}", g, b);
+					}
+					//Console.WriteLine ();
+				}
+				else { 
+					g = rndSource.Next (0, 255);
+					b = rndSource.Next (0, 255);
+				}
 				car.VisTag = new RGB (r, g, b);
 			}
 
@@ -51,7 +79,7 @@ namespace CCC_23_Rathaus.Vis
 
 			_segments = new Label [road.CountSegments];
 
-#if false
+#if MATCH_VIRT_DESKTOP
 			var maxWidth = SystemInformation.VirtualScreen.Width - (this.Width - this.ClientRectangle.Width);
 #else
 			var maxWidth = SystemInformation.PrimaryMonitorSize.Width - (this.Width - this.ClientRectangle.Width);
@@ -79,7 +107,7 @@ namespace CCC_23_Rathaus.Vis
 			this.Text = _title = string.Format ("{0} --->  {1} x {2}", title, numCols, numRows);
 
 
-#if false
+#if MATCH_VIRT_DESKTOP
 			if (this.Left + this.Width > SystemInformation.VirtualScreen.Left + SystemInformation.VirtualScreen.Width)
 				this.Left = SystemInformation.VirtualScreen.Width - this.Width + SystemInformation.VirtualScreen.Left;
 #else
@@ -107,7 +135,7 @@ namespace CCC_23_Rathaus.Vis
 				var car = road[i];
 				if (car == null) {
 					// empty segment
-					_segments[i].BackColor = Color.WhiteSmoke;
+					_segments[i].BackColor = Color.LightGray;
 					_segments[i].ForeColor = Color.Black;
 					_segments[i].Text = string.Format ("{0}", i);
 					_segments[i].TextAlign = ContentAlignment.BottomCenter;
@@ -120,21 +148,26 @@ namespace CCC_23_Rathaus.Vis
 					}
 					else if (car.IsNewOnRoad) {
 						// car is new on road
-						_segments[i].BackColor = Color.Orange;
+						_segments[i].BackColor = Color.Yellow;
 						_segments[i].ForeColor = Color.Black;
 					}
 					else if (car.IsLeaving) {
 						// car is leaving
-						_segments[i].BackColor = Color.Black;
-						_segments[i].ForeColor = Color.White;
+						_segments[i].BackColor = Color.White;
+						_segments[i].ForeColor = Color.Black;
 					}
 					else {
 						// car is driving
 						var rgb = car.VisTag as RGB;
 						_segments[i].BackColor = Color.FromArgb (      rgb.R,       rgb.G,       rgb.B);
-						_segments[i].ForeColor = Color.FromArgb (255 - rgb.R, 255 - rgb.G, 255 - rgb.B);
+						const int rgbLimit = 220;
+						if (rgb.R > rgbLimit || rgb.G > rgbLimit || rgb.B > rgbLimit)
+							_segments[i].ForeColor = Color.Black;
+						else
+							_segments[i].ForeColor = Color.White;
+//						_segments[i].ForeColor = Color.FromArgb (255 - rgb.R, 255 - rgb.G, 255 - rgb.B);
 					}
-					_segments[i].Text = car.CarName;
+					_segments[i].Text = string.Format ("{0}\n-->\n{1}", car.CarName, car.ToSegmet);
 					_segments[i].TextAlign = ContentAlignment.TopCenter;
 				}
 			}

@@ -12,6 +12,7 @@ namespace CCC_23_Rathaus
 	{
 		List<string[]> lines;
 		string inFileName;
+		static bool asciiOutput = true;
 		public Class2 (string fileName)
 		{
 			lines = CccTest.ReadInputFileByComma (inFileName = fileName);
@@ -77,9 +78,10 @@ namespace CCC_23_Rathaus
 							case '-' : op = op | Vis.CCC23RathausView.Operation.SpeedMinus; ok = true; break;
 						}
 						switch (keyInfo.Key) {
-							case ConsoleKey.Spacebar: pause = !pause; singleStep = false; continue;
-							case ConsoleKey.Enter   : pause = true  ; singleStep = true ; continue;
-							case ConsoleKey.Escape  : quit  = true  ;                     continue;
+							case ConsoleKey.Spacebar: pause       = !pause      ; singleStep = false; continue;
+							case ConsoleKey.Enter   : pause       = true        ; singleStep = true ; continue;
+							case ConsoleKey.Escape  : quit        = true        ;                     continue;
+							case ConsoleKey.A       : asciiOutput = !asciiOutput;                     continue;
 						}
 					}
 					viewer.ShowData (road, currStep, op);
@@ -90,7 +92,7 @@ namespace CCC_23_Rathaus
 				if (pause) {
 					System.Threading.Thread.Sleep (50);
 					if (pauseChanged) {
-						Console.Write ("*** PAUSE *** [Esc]...quit  [Space]...continue  [Enter]...single-step                                                                                       \r");
+						Console.Write ("*** PAUSE *** [Esc]...quit  [Space]...continue  [Enter]...single-step  [A]...toggle-ascii                                                                                     \r");
 					}
 					if (!singleStep)
 						continue;
@@ -100,16 +102,19 @@ namespace CCC_23_Rathaus
 					// NOP
 				}
 
-				Console.Write ("{0,3} : |", currStep);
-				for (int s = 0; s < road.CountSegments; s++) {
-					if (road [s] == null) {
-						Console.Write (emtpyString);
-					}
-					else {
-						Console.Write (carFmtString, road[s].CarName);
+				if (asciiOutput) {
+					Console.Write ("{0,3} : |", currStep);
+					for (int s = 0; s < road.CountSegments; s++) {
+						if (road [s] == null) {
+							Console.Write (emtpyString);
+						}
+						else {
+							Console.Write (carFmtString, road[s].CarName);
+						}
 					}
 				}
 
+				if (true)
 				{
 					// einsetzen in die road
 					for (int c = 0; c < cars.Length; c++) {
@@ -179,11 +184,12 @@ namespace CCC_23_Rathaus
 					}
 				}
 
-				Console.WriteLine ();
+				if (asciiOutput)
+					Console.WriteLine ();
 				if (carsActive == 0)
 					break;
 
-				Console.Write ("{0,-13} [Esc]...quit  [Space]...{1,-8}  [Enter]...single-step  [+]...speed-up  [-]...speed-down                                     \r"
+				Console.Write ("{0,-13} [Esc]...quit  [Space]...{1,-8}  [Enter]...single-step  [A]...toggle-ascii  [+]...speed-up  [-]...speed-down                                     \r"
 					, pause ? "*** STEP ****" : string.Empty
 					, pause ? "continue" : "pause");
 			}
