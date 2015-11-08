@@ -20,7 +20,7 @@ namespace CCC_23_Rathaus
 		{
 			CalculateResult (null);
 		}
-		public void CalculateResult (Vis.CCC23RathausView viewer)
+		public bool CalculateResult (Vis.CCC23RathausView viewer)
 		{
 			var line = lines [0];
 			var countSegments = int.Parse (line[0]);
@@ -53,7 +53,14 @@ namespace CCC_23_Rathaus
 			string carFmtString = "{0," + width.ToString () + "}|";
 			string emtpyString  = string.Format (carFmtString, string.Empty);
 
-			for (int currStep = 0; ; currStep++) {
+			bool pauseLastTime = false;
+			bool singleStep = false;
+			bool pause = false;
+			bool quit  = false;
+
+			for (int currStep = 0; !quit; currStep++) {
+
+				if (pause && !singleStep) currStep--;
 
 				for (int q = 0; q < cars.Length; q++) {
 					cars[q].Used = false;
@@ -61,9 +68,38 @@ namespace CCC_23_Rathaus
 
 				int carsActive = 0;
 				if (viewer != null) {
-					viewer.ShowData (road);
-					System.Threading.Thread.Sleep (50);
+					Vis.CCC23RathausView.Operation op = Vis.CCC23RathausView.Operation.Nix;
+					while (Console.KeyAvailable) {
+						var keyInfo = Console.ReadKey (true);
+						bool ok = false;
+						switch (keyInfo.KeyChar) {
+							case '+' : op = op | Vis.CCC23RathausView.Operation.SpeedPlus ; ok = true; break;
+							case '-' : op = op | Vis.CCC23RathausView.Operation.SpeedMinus; ok = true; break;
+						}
+						switch (keyInfo.Key) {
+							case ConsoleKey.Spacebar: pause = !pause; singleStep = false; continue;
+							case ConsoleKey.Enter   : pause = true  ; singleStep = true ; continue;
+							case ConsoleKey.Escape  : quit  = true  ;                     continue;
+						}
+					}
+					viewer.ShowData (road, currStep, op);
 				}
+
+				bool pauseChanged = pauseLastTime != pause;
+				pauseLastTime = pause;
+				if (pause) {
+					System.Threading.Thread.Sleep (50);
+					if (pauseChanged) {
+						Console.Write ("*** PAUSE *** [Esc]...quit  [Space]...continue  [Enter]...single-step                                                                                       \r");
+					}
+					if (!singleStep)
+						continue;
+					singleStep = false;
+				}
+				if (pauseChanged) {
+					// NOP
+				}
+
 				Console.Write ("{0,3} : |", currStep);
 				for (int s = 0; s < road.CountSegments; s++) {
 					if (road [s] == null) {
@@ -146,18 +182,30 @@ namespace CCC_23_Rathaus
 				Console.WriteLine ();
 				if (carsActive == 0)
 					break;
+
+				Console.Write ("{0,-13} [Esc]...quit  [Space]...{1,-8}  [Enter]...single-step  [+]...speed-up  [-]...speed-down                                     \r"
+					, pause ? "*** STEP ****" : string.Empty
+					, pause ? "continue" : "pause");
 			}
 
-			var resultString = string.Empty;
-			for (int c = 0; c < cars.Length; c++) {
-				var car = cars[c];
-				resultString += string.Format ("{0},", car.NumSteps);
+			if (quit) {
+				Console.WriteLine ();
+				Console.WriteLine ("********* QUIT by operator *********");
+				Console.WriteLine ();
 			}
-			resultString = resultString.Substring (0, resultString.Length - 1);
+			else {
+				var resultString = string.Empty;
+				for (int c = 0; c < cars.Length; c++) {
+					var car = cars[c];
+					resultString += string.Format ("{0},", car.NumSteps);
+				}
+				resultString = resultString.Substring (0, resultString.Length - 1);
 
-			var outfilename = inFileName + "1.out";
-			CccTest.CreateResultTxtFile (outfilename, resultString);
-			Console.WriteLine (outfilename);
+				var outfilename = inFileName + "1.out";
+				CccTest.CreateResultTxtFile (outfilename, resultString);
+				Console.WriteLine (outfilename);
+			}
+			return quit;
 		}
 	}
 }

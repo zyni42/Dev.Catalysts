@@ -12,8 +12,17 @@ namespace CCC_23_Rathaus.Vis
 {
 	public partial class CCC23RathausView : Form
 	{
+		[Flags]
+		public enum Operation
+		{
+			Nix = 0,
+			SpeedPlus,
+			SpeedMinus
+		}
 		private class RGB { public int R; public int G; public int B; public RGB (int r, int g, int b) { R = r; G = g; B = b; } }
-		private Label [] Segments;
+		private Label [] _segments;
+		private string   _title;
+		private int		 _sleepMSec = 50;
 		public CCC23RathausView ()
 		{
 			InitializeComponent ();
@@ -40,7 +49,7 @@ namespace CCC_23_Rathaus.Vis
 			while (this.Controls.Count > 0)
 				this.Controls.RemoveAt (0);
 
-			Segments = new Label [road.CountSegments];
+			_segments = new Label [road.CountSegments];
 
 #if false
 			var maxWidth = SystemInformation.VirtualScreen.Width - (this.Width - this.ClientRectangle.Width);
@@ -61,13 +70,13 @@ namespace CCC_23_Rathaus.Vis
 					Font = f
 				};
 				this.Controls.Add (l);
-				Segments[i] = l;
+				_segments[i] = l;
 			}
 
 			this.Width  = numCols * colWidth + (this.Width - this.ClientRectangle.Width);
 			this.Height = numRows * colHeight + (this.Height - this.ClientRectangle.Height);
 
-			this.Text = string.Format ("{0} --->  {1} x {2}", title, numCols, numRows);
+			this.Text = _title = string.Format ("{0} --->  {1} x {2}", title, numCols, numRows);
 
 
 #if false
@@ -81,47 +90,59 @@ namespace CCC_23_Rathaus.Vis
 			this.Show ();
 		}
 
-		public void ShowData (Road road)
+		public void ShowData (Road road, int currStep, Operation op)
 		{
+			
+			if (op.HasFlag (Operation.SpeedMinus)) {
+				_sleepMSec += 25;
+				_sleepMSec = Math.Min (_sleepMSec, 2000);
+			}
+			else if (op.HasFlag (Operation.SpeedPlus)) {
+				_sleepMSec -= 25;
+				_sleepMSec = Math.Max (_sleepMSec, 0);
+			}
+			this.Text = string.Format ("{0}  -  step {1}  -  wait {2}msec", _title, currStep, _sleepMSec);
 			this.SuspendLayout ();
 			for (int i = 0; i < road.CountSegments; i++) {
 				var car = road[i];
 				if (car == null) {
 					// empty segment
-					Segments[i].BackColor = Color.WhiteSmoke;
-					Segments[i].ForeColor = Color.Black;
-					Segments[i].Text = string.Format ("{0}", i);
-					Segments[i].TextAlign = ContentAlignment.BottomCenter;
+					_segments[i].BackColor = Color.WhiteSmoke;
+					_segments[i].ForeColor = Color.Black;
+					_segments[i].Text = string.Format ("{0}", i);
+					_segments[i].TextAlign = ContentAlignment.BottomCenter;
 				}
 				else {
 					if (car.Waiting) {
 						// car is waiting
-						Segments[i].BackColor = Color.Red;
-						Segments[i].ForeColor = Color.White;
+						_segments[i].BackColor = Color.Red;
+						_segments[i].ForeColor = Color.White;
 					}
 					else if (car.IsNewOnRoad) {
 						// car is new on road
-						Segments[i].BackColor = Color.Orange;
-						Segments[i].ForeColor = Color.Black;
+						_segments[i].BackColor = Color.Orange;
+						_segments[i].ForeColor = Color.Black;
 					}
 					else if (car.IsLeaving) {
 						// car is leaving
-						Segments[i].BackColor = Color.Black;
-						Segments[i].ForeColor = Color.White;
+						_segments[i].BackColor = Color.Black;
+						_segments[i].ForeColor = Color.White;
 					}
 					else {
 						// car is driving
 						var rgb = car.VisTag as RGB;
-						Segments[i].BackColor = Color.FromArgb (      rgb.R,       rgb.G,       rgb.B);
-						Segments[i].ForeColor = Color.FromArgb (255 - rgb.R, 255 - rgb.G, 255 - rgb.B);
+						_segments[i].BackColor = Color.FromArgb (      rgb.R,       rgb.G,       rgb.B);
+						_segments[i].ForeColor = Color.FromArgb (255 - rgb.R, 255 - rgb.G, 255 - rgb.B);
 					}
-					Segments[i].Text = car.CarName;
-					Segments[i].TextAlign = ContentAlignment.TopCenter;
+					_segments[i].Text = car.CarName;
+					_segments[i].TextAlign = ContentAlignment.TopCenter;
 				}
 			}
 			this.ResumeLayout ();
 			this.Refresh ();
 			this.Show ();
+			if (_sleepMSec > 0)
+				System.Threading.Thread.Sleep (_sleepMSec);
 		}
 	}
 }
