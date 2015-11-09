@@ -1,5 +1,4 @@
-﻿#define MATCH_VIRT_DESKTOP
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -24,8 +23,10 @@ namespace CCC_23_Rathaus.Vis
 		private Label [] _segments;
 		private string   _title;
 		private int		 _sleepMSec = 50;
-		public CCC23RathausView ()
+		private	bool	 _visUseDesktopSize = false;
+		public CCC23RathausView (bool visUseDesktopSize)
 		{
+			_visUseDesktopSize = visUseDesktopSize;
 			InitializeComponent ();
 		}
 
@@ -79,11 +80,12 @@ namespace CCC_23_Rathaus.Vis
 
 			_segments = new Label [road.CountSegments];
 
-#if MATCH_VIRT_DESKTOP
-			var maxWidth = SystemInformation.VirtualScreen.Width - (this.Width - this.ClientRectangle.Width);
-#else
-			var maxWidth = SystemInformation.PrimaryMonitorSize.Width - (this.Width - this.ClientRectangle.Width);
-#endif
+			var maxWidth =
+				_visUseDesktopSize
+				? SystemInformation.VirtualScreen.Width - (this.Width - this.ClientRectangle.Width)
+				: SystemInformation.PrimaryMonitorSize.Width - (this.Width - this.ClientRectangle.Width)
+				;
+
 			var maxCols  = maxWidth / colWidth;
 			var numCols  = Math.Min (road.CountSegments, maxCols);
 			var numRows  = (road.CountSegments + numCols - 1) / numCols;
@@ -107,14 +109,14 @@ namespace CCC_23_Rathaus.Vis
 			this.Text = _title = string.Format ("{0} --->  {1} x {2}", title, numCols, numRows);
 
 
-#if MATCH_VIRT_DESKTOP
-			if (this.Left + this.Width > SystemInformation.VirtualScreen.Left + SystemInformation.VirtualScreen.Width)
-				this.Left = SystemInformation.VirtualScreen.Width - this.Width + SystemInformation.VirtualScreen.Left;
-#else
-			if (this.Left + this.Width > 0 + SystemInformation.PrimaryMonitorSize.Width)
-				this.Left = SystemInformation.PrimaryMonitorSize.Width - this.Width + 0;
-#endif
-
+			if (_visUseDesktopSize) {
+				if (this.Left + this.Width > SystemInformation.VirtualScreen.Left + SystemInformation.VirtualScreen.Width)
+					this.Left = SystemInformation.VirtualScreen.Width - this.Width + SystemInformation.VirtualScreen.Left;
+			}
+			else {
+				if (this.Left + this.Width > 0 + SystemInformation.PrimaryMonitorSize.Width)
+					this.Left = SystemInformation.PrimaryMonitorSize.Width - this.Width + 0;
+			}
 			this.Show ();
 		}
 
