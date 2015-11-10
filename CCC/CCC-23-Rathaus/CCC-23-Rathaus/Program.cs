@@ -13,15 +13,25 @@ namespace CCC_23_Rathaus
 		{
 			if (!ParseCl (args))
 				return;
-			var vis = new Vis.CCC23RathausView (_visUseDesktopSize);
+			// Level 1
+			Class1 l1 = null;
+			l1 = new Class1 ("..\\..\\Level1\\level1_1.in"); l1.CalculateResult ();
+			l1 = new Class1 ("..\\..\\Level1\\level1_2.in"); l1.CalculateResult ();
+			l1 = new Class1 ("..\\..\\Level1\\level1_3.in"); l1.CalculateResult ();
+			l1 = new Class1 ("..\\..\\Level1\\level1_4.in"); l1.CalculateResult ();
+			l1 = new Class1 ("..\\..\\Level1\\level1_5.in"); l1.CalculateResult ();
+			l1 = new Class1 ("..\\..\\Level1\\level1_6.in"); l1.CalculateResult ();
+
+			// Level 2
+			var vis = new Vis.CCC23RathausView(_visUseDesktopSize);
 			Class2 l2 = null;
 			//l2 = new Class2 ("..\\..\\Level2\\level2_example.in"); l2.CalculateResult ();
-			Car1.ResetCarNames (); l2 = new Class2 ("..\\..\\Level2\\level2_1.in"); if (l2.CalculateResult (vis)) return;
-			Car1.ResetCarNames (); l2 = new Class2 ("..\\..\\Level2\\level2_2.in"); if (l2.CalculateResult (vis)) return;
-			Car1.ResetCarNames (); l2 = new Class2 ("..\\..\\Level2\\level2_3.in"); if (l2.CalculateResult (vis)) return;
-			Car1.ResetCarNames (); l2 = new Class2 ("..\\..\\Level2\\level2_4.in"); if (l2.CalculateResult (vis)) return;
-			Car1.ResetCarNames (); l2 = new Class2 ("..\\..\\Level2\\level2_5.in"); if (l2.CalculateResult (vis)) return;
-			Car1.ResetCarNames (); l2 = new Class2 ("..\\..\\Level2\\level2_6.in"); if (l2.CalculateResult (vis)) return;
+			Car1.ResetCarNames(); l2 = new Class2("..\\..\\Level2\\level2_1.in"); if (l2.CalculateResult(vis)) return;
+			Car1.ResetCarNames(); l2 = new Class2("..\\..\\Level2\\level2_2.in"); if (l2.CalculateResult(vis)) return;
+			Car1.ResetCarNames(); l2 = new Class2("..\\..\\Level2\\level2_3.in"); if (l2.CalculateResult(vis)) return;
+			Car1.ResetCarNames(); l2 = new Class2("..\\..\\Level2\\level2_4.in"); if (l2.CalculateResult(vis)) return;
+			Car1.ResetCarNames(); l2 = new Class2("..\\..\\Level2\\level2_5.in"); if (l2.CalculateResult(vis)) return;
+			Car1.ResetCarNames(); l2 = new Class2("..\\..\\Level2\\level2_6.in"); if (l2.CalculateResult(vis)) return;
 		}
 
 		static bool ParseCl(string[] args)
