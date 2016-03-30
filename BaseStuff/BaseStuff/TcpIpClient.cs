@@ -39,6 +39,11 @@ namespace BaseStuff
 			return stb.ToString ();
 		}
 
+		public void SendText (string textToSend)
+		{
+			_client.Send (Encoding.ASCII.GetBytes (textToSend));
+		}
+
 		public void Close ()
 		{
 			if (_client != null)
