@@ -10,41 +10,44 @@ namespace BaseStuff
 {
     public class CccTest
     {
+		#region Parse input
 		public static List<string[]> ReadInputFile (string inputFile)
 		{
-			var sr = File.OpenText (inputFile);
-			var inputFileContent = sr.ReadToEnd ();
-			sr.Close ();
-
-			var lines = inputFileContent.Split (new string [] { "\r", "\n" }, StringSplitOptions.RemoveEmptyEntries);
-			List<string[]> splittedLines = new List<string[]> (lines.Length);
-			
-			for (int i = 0; i < lines.Length; i++)
-				splittedLines.Add (lines[i].Split (new char [] {' '}, StringSplitOptions.RemoveEmptyEntries));
-			
-			return splittedLines;
+			return ReadInputFileExtended (inputFile, new string [] { "\r", "\n" }, new string [] {" "});
 		}
 
 		public static List<string[]> ReadInputFileByComma (string inputFile)
 		{
+			return ReadInputFileExtended (inputFile, new string [] { "\r", "\n" }, new string [] {","});
+		}
+
+		public static List<string[]> ReadInputFileExtended (string inputFile, string[] newLineChars, string[] dataSeperators)
+		{
 			var sr = File.OpenText (inputFile);
 			var inputFileContent = sr.ReadToEnd ();
 			sr.Close ();
 
-			var lines = inputFileContent.Split (new string [] { "\r", "\n" }, StringSplitOptions.RemoveEmptyEntries);
+			var lines = inputFileContent.Split (newLineChars, StringSplitOptions.RemoveEmptyEntries);
 			List<string[]> splittedLines = new List<string[]> (lines.Length);
 			
 			for (int i = 0; i < lines.Length; i++)
-				splittedLines.Add (lines[i].Split (new char [] {','}, StringSplitOptions.RemoveEmptyEntries));
+				splittedLines.Add (SplitBySeperators (lines[i], dataSeperators));
 			
 			return splittedLines;
 		}
 
 		public static string[] SplitBySpaces (string input)
 		{
-			return input.Split (new char [] {' '}, StringSplitOptions.RemoveEmptyEntries);
+			return SplitBySeperators (input, new string[] {" "});
 		}
 
+		public static string[] SplitBySeperators (string input, string[] seperators)
+		{
+			return input.Split (seperators, StringSplitOptions.RemoveEmptyEntries);
+		}
+		#endregion
+
+		#region Create Results
 		public static void CreateResultTxtFile (string file, string result)
 		{
 			try { if (!Directory.Exists (Path.GetDirectoryName(file))) Directory.CreateDirectory (Path.GetDirectoryName(file)); }
@@ -58,7 +61,6 @@ namespace BaseStuff
 		public static void CreateResultImageFile (string file, Image result)
 		{
 			if (!Directory.Exists (Path.GetDirectoryName(file))) Directory.CreateDirectory (Path.GetDirectoryName(file));
-
 			result.Save (file, System.Drawing.Imaging.ImageFormat.Bmp);
 		}
 
@@ -72,7 +74,9 @@ namespace BaseStuff
 		{
 			return new FastBitmap (bitmap);
 		}
+		#endregion
 
+		#region 1-based position & row/column helper
 		// NOTE: 1-based positions/rows/cols
 		public static void OneBasedPositionToRowAndColumn (int position, int numRows, int numColumns, out int row, out int col)
 		{
@@ -100,7 +104,9 @@ namespace BaseStuff
 		{
 			return (row > 0 && row <= numRows && column > 0 && column <= numColumns);
 		}
+		#endregion
 
+		#region Output to STDERR
 		public static void WriteLineToStandardError (string msg)
 		{
 			msg += System.Environment.NewLine;
@@ -115,10 +121,13 @@ namespace BaseStuff
 			System.Buffer.BlockCopy(msg.ToCharArray(), 0, bytes, 0, bytes.Length);
 			Console.OpenStandardError ().Write (bytes, 0, bytes.Length);
 		}
+		#endregion
 
+		#region Conversion helper
 		public static float FloatParse (string floatNr)
 		{
 			return float.Parse (floatNr.Replace (".", ","));
 		}
+		#endregion
     }
 }
