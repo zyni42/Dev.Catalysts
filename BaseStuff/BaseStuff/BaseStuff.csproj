@@ -45,6 +45,7 @@
     <Compile Include="FastBitmap.cs" />
     <Compile Include="ICccLevel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="TcpIpClient.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="CCC.ico" />
