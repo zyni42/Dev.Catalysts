@@ -1,9 +1,11 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 2013
-VisualStudioVersion = 12.0.30723.0
+# Visual Studio 14
+VisualStudioVersion = 14.0.24720.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BaseStuff", "BaseStuff\BaseStuff.csproj", "{03BABF37-FA46-438D-8F8B-DEB3DA2E5AF6}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TcpIpEchoConsole", "TcpIpEchoConsole\TcpIpEchoConsole.csproj", "{8AD49E52-DA4F-49BC-ADBC-D2D7A4C5D701}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,6 +17,10 @@ Global
 		{03BABF37-FA46-438D-8F8B-DEB3DA2E5AF6}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{03BABF37-FA46-438D-8F8B-DEB3DA2E5AF6}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{03BABF37-FA46-438D-8F8B-DEB3DA2E5AF6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8AD49E52-DA4F-49BC-ADBC-D2D7A4C5D701}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8AD49E52-DA4F-49BC-ADBC-D2D7A4C5D701}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8AD49E52-DA4F-49BC-ADBC-D2D7A4C5D701}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8AD49E52-DA4F-49BC-ADBC-D2D7A4C5D701}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
