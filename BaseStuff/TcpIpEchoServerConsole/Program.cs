@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 using BaseStuff;
 
-namespace TcpIpEchoConsole
+namespace TcpIpEchoServerConsole
 {
 	class Program
 	{
