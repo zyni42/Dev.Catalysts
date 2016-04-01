@@ -8,26 +8,10 @@ namespace BaseStuff
 {
 	public class TcpIpServer : IDisposable
 	{
-		public class ClientSocketEventArgs : EventArgs
-		{
-			Socket _clientSocket = null;
-
-			public Socket ClientSocket
-			{
-				get { return _clientSocket; }
-				set { _clientSocket = value; }
-			}
-
-			public ClientSocketEventArgs (Socket socket)
-			{
-				ClientSocket = socket;
-			}
-		}
-		
 		Socket _server = null;
-		List<Socket> _clients = new List<Socket> ();
+		protected List<Socket> _clients = new List<Socket> ();
 
-		public IPEndPoint ServerEndPoint
+		public IPEndPoint LocalEndPoint
 		{
 			get { return _server.LocalEndPoint as IPEndPoint; }
 		}
@@ -41,16 +25,17 @@ namespace BaseStuff
 			_server.Listen (5);
 		}
 
-		public void HandleClientConnectionEvent ()
+		public void DoAcceptClientConnections ()
 		{
 			try
 			{
 				var clientSocket = _server.Accept ();
-				EventHandler<ClientSocketEventArgs> handler = ClientConnected;
-				if (handler != null)
-				{
-					handler (this, new ClientSocketEventArgs (clientSocket));
-				}
+				_clients.Add (clientSocket);
+
+				Console.WriteLine ("Client connected (IP \"{0}\", Port {1})",
+					(clientSocket.RemoteEndPoint as IPEndPoint).Address.ToString (),
+					(clientSocket.RemoteEndPoint as IPEndPoint).Port
+					);
 			}
 			catch (SocketException sex)
 			{
@@ -62,7 +47,9 @@ namespace BaseStuff
 			}
 		}
 
-		protected event EventHandler<ClientSocketEventArgs> ClientConnected;
+		public virtual void DoServerWork ()
+		{
+		}
 
 		public void Close ()
 		{

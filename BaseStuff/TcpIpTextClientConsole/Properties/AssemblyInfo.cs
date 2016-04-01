@@ -5,11 +5,11 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("TcpIpEchoServerConsole")]
+[assembly: AssemblyTitle("TcpIpTextClientConsole")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("TcpIpEchoServerConsole")]
+[assembly: AssemblyProduct("TcpIpTextClientConsole")]
 [assembly: AssemblyCopyright("Copyright ©  2016")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
@@ -20,7 +20,7 @@ using System.Runtime.InteropServices;
 [assembly: ComVisible(false)]
 
 // The following GUID is for the ID of the typelib if this project is exposed to COM
-[assembly: Guid("8ad49e52-da4f-49bc-adbc-d2d7a4c5d701")]
+[assembly: Guid("9686ba22-1dc0-4572-8b99-191693b2545d")]
 
 // Version information for an assembly consists of the following four values:
 //

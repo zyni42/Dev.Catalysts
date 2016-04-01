@@ -7,6 +7,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BaseStuff", "BaseStuff\Base
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TcpIpEchoServerConsole", "TcpIpEchoServerConsole\TcpIpEchoServerConsole.csproj", "{8AD49E52-DA4F-49BC-ADBC-D2D7A4C5D701}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TcpIpTextClientConsole", "TcpIpTextClientConsole\TcpIpTextClientConsole.csproj", "{9686BA22-1DC0-4572-8B99-191693B2545D}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +23,10 @@ Global
 		{8AD49E52-DA4F-49BC-ADBC-D2D7A4C5D701}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{8AD49E52-DA4F-49BC-ADBC-D2D7A4C5D701}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{8AD49E52-DA4F-49BC-ADBC-D2D7A4C5D701}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9686BA22-1DC0-4572-8B99-191693B2545D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9686BA22-1DC0-4572-8B99-191693B2545D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9686BA22-1DC0-4572-8B99-191693B2545D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9686BA22-1DC0-4572-8B99-191693B2545D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

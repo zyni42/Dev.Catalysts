@@ -9,28 +9,52 @@ namespace BaseStuff
 	public class TcpIpClient : IDisposable
 	{
 		Socket _client = null;
+		byte[] _rcvdBytes = new byte[1024];
+
+		public IPEndPoint LocalEndPoint
+		{
+			get { return _client.LocalEndPoint as IPEndPoint; }
+		}
+
+		public bool IsClosed
+		{
+			get { return (_client == null); }
+		}
 
 		public void CreateAndConnect (string ip, int port)
 		{
 			if (_client != null) Close ();
 			_client = new Socket (SocketType.Stream, ProtocolType.Tcp);
+			_client.ReceiveBufferSize = 1024;
 			_client.Connect (IPAddress.Parse (ip), port);
+			_client.Blocking = false;
 		}
 
 		public string ReceiveText ()
 		{
 			if (_client.Available == 0) return string.Empty;
 
-			byte[] rcvdBytes = new byte[1024];
-			_client.ReceiveBufferSize = 1024;
 			int numRcvdBytes = 0;
 			string rcvdString = "";
 			StringBuilder stb = new StringBuilder ();
 
-			while ((numRcvdBytes = _client.Receive (rcvdBytes)) > 0)
+			while (true)
 			{
-				rcvdString = Encoding.ASCII.GetString (rcvdBytes, 0, numRcvdBytes);
-				stb.Append (rcvdString);
+				try
+				{
+					numRcvdBytes = _client.Receive(_rcvdBytes);
+					rcvdString = Encoding.ASCII.GetString (_rcvdBytes, 0, numRcvdBytes);
+					stb.Append (rcvdString);
+				}					
+				catch (SocketException sex)
+				{
+					if (sex.ErrorCode == 10035)		// WSAEWOULDBLOCK (on non blocking sockets, if no request available)
+					{
+						System.Threading.Thread.Sleep (100);
+						break;
+					}
+					else throw sex;
+				}
 			}
 
 			return stb.ToString ();
@@ -38,7 +62,18 @@ namespace BaseStuff
 
 		public void SendText (string textToSend)
 		{
-			_client.Send (Encoding.ASCII.GetBytes (textToSend));
+			try
+			{
+				_client.Send (Encoding.ASCII.GetBytes (textToSend));
+			}
+			catch (SocketException sex)
+			{
+				if (sex.ErrorCode == 10053)			// WSAECONNABORTED Software caused connection abort.
+				{
+					Console.WriteLine ("WSAECONNABORTED -> closing client...");
+					Close ();
+				}
+			}
 		}
 
 		public void Close ()

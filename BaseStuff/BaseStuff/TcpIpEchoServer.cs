@@ -1,67 +1,63 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
+
+using System.Net;
+using System.Net.Sockets;
+using System.Text;
 
 namespace BaseStuff
 {
 	public class TcpIpEchoServer : TcpIpServer
 	{
-		bool _running = false;
-		
 		private TcpIpEchoServer () {}
 		public TcpIpEchoServer (string ip, int port)
 		{
-			ClientConnected += TcpIpEchoServer_ClientConnected;
 			CreateAndListen(ip, port);
 		}
 
-		public void Run ()
+		public override void DoServerWork()
 		{
-			_running = true;
-			while (_running)
+			foreach (var client in _clients)
 			{
-				HandleClientConnectionEvent ();
-			}
-		}
+				byte[] byteBuffer = new byte[1024];
+				List<Byte> rcvdBytes = new List<byte>(1024);
+				client.ReceiveBufferSize = 1024;
+				int numRcvdBytes = 0;
 
-		public void RunStep ()
-		{
-			HandleClientConnectionEvent ();
-		}
-
-		private void TcpIpEchoServer_ClientConnected(object sender, ClientSocketEventArgs e)
-		{
-			byte[] byteBuffer = new byte[1024];
-			List<Byte> rcvdBytes = new List<byte> (1024);
-			e.ClientSocket.ReceiveBufferSize = 1024;
-			int numRcvdBytes = 0;
-
-			while (_running)
-			{
-				if (e.ClientSocket.Available == 0)
-				{
-					System.Threading.Thread.Sleep (100);
-					continue;
-				}
+				if (client.Available == 0) continue;
 
 				// Receive data
 				rcvdBytes.Clear();
 				numRcvdBytes = 0;
-				while ((numRcvdBytes = e.ClientSocket.Receive (byteBuffer)) > 0)
+				while (true)
 				{
-					rcvdBytes.AddRange (byteBuffer);
+					try
+					{
+						numRcvdBytes = client.Receive(byteBuffer);
+						rcvdBytes.AddRange(byteBuffer.Take (numRcvdBytes).ToArray ());
+					}					
+					catch (SocketException sex)
+					{
+						if (sex.ErrorCode == 10035)		// WSAEWOULDBLOCK (on non blocking sockets, if no request available)
+						{
+							System.Threading.Thread.Sleep (100);
+							break;
+						}
+						else throw sex;
+					}
 				}
+				var rcvdBytesArray = rcvdBytes.ToArray();
+
+				Console.WriteLine("Client (IP \"{0}\", Port {1}): \"{2}\"",
+					(client.RemoteEndPoint as IPEndPoint).Address.ToString(),
+					(client.RemoteEndPoint as IPEndPoint).Port,
+					Encoding.ASCII.GetString(rcvdBytesArray, 0, rcvdBytesArray.Length)
+					);
 
 				// Send data back
-				var rcvdBytesArray = rcvdBytes.ToArray ();
-				e.ClientSocket.Send (rcvdBytesArray);
+				client.Send(rcvdBytesArray);
 			}
-		}
-
-		public new void Close()
-		{
-			ClientConnected -= TcpIpEchoServer_ClientConnected;
-			base.Close();
-			_running = false;
 		}
 	}
 }
