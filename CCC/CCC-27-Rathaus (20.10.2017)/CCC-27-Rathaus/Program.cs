@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace CCC_24_Linz
+namespace CCC_27_Rathaus
 {
 	class Program
 	{
