@@ -1,14 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
-using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
+using System.IO;
 
 namespace CCC_40_Rathaus
 {
-    internal class Level5
+    internal class Level6
     {
         public string CalculateResult(string levelFile)
         {
@@ -298,35 +297,5 @@ namespace CCC_40_Rathaus
             //Console.ReadLine();
             return output;
         }
-
-        //     bool FillDesks(bool richtung, bool ausrichtung, int startX, int startY, int maxX, int maxY, out Tuple<int,int> nextPriority)
-        //     {
-        //nextPriority = null;
-        //if (startX >= maxX || startY >= maxY) return false;
-
-        //if (richtung)   // rechts
-        //         {
-        //             if (ausrichtung)    // vertikal
-        //             {
-        //                 if (startY + 1 >= maxY) return FillDesks (richtung, !ausrichtung, startX, startY, maxX, maxY, out nextPriority);
-
-        //             }
-        //             else    // horizontal
-        //             {
-
-        //             }
-        //         }
-        //         else // runter
-        //         {
-        //             if (ausrichtung)    // vertikal
-        //             {
-
-        //             }
-        //             else    // horizontal
-        //             {
-
-        //             }
-        //         }
-        //     }
     }
 }
