@@ -57,7 +57,7 @@ namespace CCC_40_Rathaus
         string[] IDPlacement(string input)
         {
             string[] values = input.Split(' ');
-            int x = int.Parse(values[0]), y = int.Parse(values[1]), desks = int.Parse(values[2]), currentId = 1, currentdesks = 0;
+            int x = int.Parse(values[0]), y = int.Parse(values[1]), desks = int.Parse(values[2]), length = int.Parse(values[3]), width = 1, currentId = 1, currentdesks = 0;
             int[,] boardAccess = new int[x, y];
             int[,] boardState = new int[x, y];
             int[][] priority = new int[][] { new int[] { 0, 0 }, new int[] { -1, -1 } }; //x,y
@@ -107,27 +107,38 @@ namespace CCC_40_Rathaus
 
 
                 //ein baustein geht sich stehend aus
-                if (cp[1] + 1 < y && cp[0] < x) //RECHTS
+                if (cp[1] + length - 1 < y && cp[0] + width - 1 < x) //RECHTS
                 {
-                    //zahlt sich aus ist noch genug platz
-                    if (cp[1] + 3 < y && cp[0] + 2 < x)
+                    //zahlt sich aus ist noch genug platz und priority lässt sich neu placen
+                    if (cp[1] + length + 1 < y && cp[0] + width + 1 < x)
                     {
-                        priority[usedP] = new int[] { cp[0], cp[1] + 3 };
-                        boardState[cp[0], cp[1]] = 1;
-                        boardState[cp[0], cp[1] + 1] = 1;
+                        priority[usedP] = new int[] { cp[0], cp[1] + length + 1 };
+                        for (int deskX = 0; deskX < width; deskX++)
+                        {
+                            for (int deskY = 0; deskY < length; deskY++)
+                            {
+                                boardState[cp[0] + deskX, cp[1] + deskY] = 1;
+                            }
+                        }
                         currentdesks++;
+
                         while (true)
                         {
-                            cp[0] += 2;
-                            if ((cp[0] + 2 < x || cp[0] + 1 == x) && IsFree(boardState, new int[] { cp[0] - 1, cp[1] - 1 }, 3, 4))
+                            cp[0] += width + 1;
+                            if ((cp[0] + width + 1 < x || cp[0] + width == x) && IsFree(boardState, new int[] { cp[0] - 1, cp[1] - 1 }, width + 2, length + 2))
                             {
-                                boardState[cp[0], cp[1]] = 1;
-                                boardState[cp[0], cp[1] + 1] = 1;
+                                for (int deskX = 0; deskX < width; deskX++)
+                                {
+                                    for (int deskY = 0; deskY < length; deskY++)
+                                    {
+                                        boardState[cp[0] + deskX, cp[1] + deskY] = 1;
+                                    }
+                                }
                                 currentdesks++;
                             }
                             else
                             {
-                                if (priority[(usedP + 1) % 2][0] == -1 && cp[0] < x && cp[1] < y && IsFree(boardState, new int[] { cp[0] - 1, cp[1] - 1 }, 4, 4))
+                                if (priority[(usedP + 1) % 2][0] == -1 && cp[0] < x && cp[1] < y && (IsFree(boardState, new int[] { cp[0] - 1, cp[1] - 1 }, width + 2, length + 2) || IsFree(boardState, new int[] { cp[0] - 1, cp[1] - 1 }, length + 2, width + 2)))
                                 {
                                     priority[(usedP + 1) % 2][0] = cp[0];
                                     priority[(usedP + 1) % 2][1] = cp[1];
@@ -137,42 +148,63 @@ namespace CCC_40_Rathaus
                         }
                     }
                     //ein tisch geht sich genau stehend aus oder es ist die WALL
-                    else if (cp[1] + 2 == y || cp[0] + 1 == x)
+                    else if (cp[1] + length == y || cp[0] + width == x)
                     {
                         priority[usedP] = new int[] { -1, -1 };
-                        boardState[cp[0], cp[1]] = 1;
-                        boardState[cp[0], cp[1] + 1] = 1;
+                        for (int deskX = 0; deskX < width; deskX++)
+                        {
+                            for (int deskY = 0; deskY < length; deskY++)
+                            {
+                                boardState[cp[0] + deskX, cp[1] + deskY] = 1;
+                            }
+                        }
                         currentdesks++;
                         while (true)
                         {
-                            cp[0] += 2;
-                            if (cp[0] < x && IsFree(boardState, new int[] { cp[0] - 1, cp[1] - 1 }, 3, 4))
+                            cp[0] += width + 1;
+                            if (cp[0] < x && IsFree(boardState, new int[] { cp[0] - 1, cp[1] - 1 }, width + 2, length + 2))
                             {
-                                boardState[cp[0], cp[1]] = 1;
-                                boardState[cp[0], cp[1] + 1] = 1;
+                                for (int deskX = 0; deskX < width; deskX++)
+                                {
+                                    for (int deskY = 0; deskY < length; deskY++)
+                                    {
+                                        boardState[cp[0] + deskX, cp[1] + deskY] = 1;
+                                    }
+                                }
                                 currentdesks++;
                             }
                             else break;
                         }
                     }
-
-                    else if (cp[0] + 1 < x && cp[1] < y && IsFree(boardState, new int[] { cp[0] - 1, cp[1] - 1 }, 4, 3))//UNTEN
+                    //UNTEN
+                    else if (cp[0] + length - 1 < x && cp[1] + width - 1 < y && IsFree(boardState, new int[] { cp[0] - 1, cp[1] - 1 }, length + 2, width + 2))//UNTEN
                     {
                         //priority lässt sich neu platzieren
-                        if (cp[0] + 3 < x)
+                        if (cp[0] + length + 1 < x)
                         {
-                            if (IsFree(boardState, new int[] { cp[0] + 3 - 1, cp[1] - 1 }, 3, 3)) priority[usedP] = new int[] { cp[0] + 3, cp[1] };
-                            else if (IsFree(boardState, new int[] { cp[0] + 3 - 1, cp[1] + 1 - 1 }, 3, 3)) priority[usedP] = new int[] { cp[0] + 3, cp[1] + 1 };
-                            boardState[cp[0], cp[1]] = 1;
-                            boardState[cp[0] + 1, cp[1]] = 1;
+                            //TODO: das sollte mit nem loop alle möglichen durchgehen oder so
+                            if (IsFree(boardState, new int[] { cp[0] + length, cp[1] - 1 }, 3, 3)) priority[usedP] = new int[] { cp[0] + length + 1, cp[1] };
+                            else if (IsFree(boardState, new int[] { cp[0] + length, cp[1] }, 3, 3)) priority[usedP] = new int[] { cp[0] + length, cp[1] + 1 };
+                            for (int deskX = 0; deskX < length; deskX++)
+                            {
+                                for (int deskY = 0; deskY < width; deskY++)
+                                {
+                                    boardState[cp[0] + deskX, cp[1] + deskY] = 1;
+                                }
+                            }
                             currentdesks++;
                             while (true)
                             {
-                                cp[1] += 2;
-                                if ((cp[1] + 2 < y || cp[1] + 1 == y) && IsFree(boardState, new int[] { cp[0] - 1, cp[1] - 1 }, 4, 3))
+                                cp[1] += width + 1;
+                                if ((cp[1] + width + 1 < y || cp[1] + width == y) && IsFree(boardState, new int[] { cp[0] - 1, cp[1] - 1 }, length + 2, width + 2))
                                 {
-                                    boardState[cp[0], cp[1]] = 1;
-                                    boardState[cp[0] + 1, cp[1]] = 1;
+                                    for (int deskX = 0; deskX < length; deskX++)
+                                    {
+                                        for (int deskY = 0; deskY < width; deskY++)
+                                        {
+                                            boardState[cp[0] + deskX, cp[1] + deskY] = 1;
+                                        }
+                                    }
                                     currentdesks++;
                                 }
                                 else break;
@@ -183,16 +215,26 @@ namespace CCC_40_Rathaus
                         else
                         {
                             priority[usedP] = new int[] { -1, -1 };
-                            boardState[cp[0], cp[1]] = 1;
-                            boardState[cp[0] + 1, cp[1]] = 1;
+                            for (int deskX = 0; deskX < length; deskX++)
+                            {
+                                for (int deskY = 0; deskY < width; deskY++)
+                                {
+                                    boardState[cp[0] + deskX, cp[1] + deskY] = 1;
+                                }
+                            }
                             currentdesks++;
                             while (true)
                             {
-                                cp[1] += 2;
-                                if ((cp[1] + 2 < y || cp[1] + 1 == y) && IsFree(boardState, new int[] { cp[0] - 1, cp[1] - 1 }, 4, 3))
+                                cp[1] += width + 1;
+                                if ((cp[1] + width <= y) && IsFree(boardState, new int[] { cp[0] - 1, cp[1] - 1 }, length + 2, width + 2))
                                 {
-                                    boardState[cp[0], cp[1]] = 1;
-                                    boardState[cp[0] + 1, cp[1]] = 1;
+                                    for (int deskX = 0; deskX < length; deskX++)
+                                    {
+                                        for (int deskY = 0; deskY < width; deskY++)
+                                        {
+                                            boardState[cp[0] + deskX, cp[1] + deskY] = 1;
+                                        }
+                                    }
                                     currentdesks++;
                                 }
                                 else break;
@@ -201,29 +243,44 @@ namespace CCC_40_Rathaus
                     }
                     else
                     {
-                        if (IsFree(boardState, new int[] { cp[0] + 2 - 1, cp[1] - 1 }, 3, 3)) priority[usedP] = new int[] { cp[0] + 2, cp[1] };
-                        else if (IsFree(boardState, new int[] { cp[0] + 2 - 1, cp[1] + 1 - 1 }, 3, 3)) priority[usedP] = new int[] { cp[0] + 2, cp[1] + 1 };
-                        boardState[cp[0], cp[1]] = 1;
-                        boardState[cp[0], cp[1] + 1] = 1;
+                        if (IsFree(boardState, new int[] { cp[0] + width, cp[1] - 1 }, 3, 3)) priority[usedP] = new int[] { cp[0] + width + 1, cp[1] };
+                        else if (IsFree(boardState, new int[] { cp[0] + width, cp[1] }, 3, 3)) priority[usedP] = new int[] { cp[0] + 2, cp[1] + 1 };
+                        for (int deskX = 0; deskX < width; deskX++)
+                        {
+                            for (int deskY = 0; deskY < length; deskY++)
+                            {
+                                boardState[cp[0] + deskX, cp[1] + deskY] = 1;
+                            }
+                        }
                         currentdesks++;
                     }
-                }
-                else if (cp[0] + 1 < x && cp[1] < y && IsFree(boardState, new int[] { cp[0] - 1, cp[1] - 1 }, 4, 3)) //UNTEN
+                }//DONE
+                else if (cp[0] + length - 1 < x && cp[1] + width - 1 < y && IsFree(boardState, new int[] { cp[0] - 1, cp[1] - 1 }, length + 2, width + 2)) //UNTEN
                 {
                     //priority lässt sich neu plazieren
-                    if (cp[0] + 3 < x)
+                    if (cp[0] + length + 1 < x)
                     {
-                        priority[usedP] = new int[] { cp[0] + 3, cp[1] };
-                        boardState[cp[0], cp[1]] = 1;
-                        boardState[cp[0] + 1, cp[1]] = 1;
+                        priority[usedP] = new int[] { cp[0] + length + 1, cp[1] };
+                        for (int deskX = 0; deskX < length; deskX++)
+                        {
+                            for (int deskY = 0; deskY < width; deskY++)
+                            {
+                                boardState[cp[0] + deskX, cp[1] + deskY] = 1;
+                            }
+                        }
                         currentdesks++;
                         while (true)
                         {
-                            cp[1] += 2;
-                            if (cp[1] < y && IsFree(boardState, new int[] { cp[0] - 1, cp[1] - 1 }, 4, 3))
+                            cp[1] += width + 1;
+                            if (cp[1] < y && IsFree(boardState, new int[] { cp[0] - 1, cp[1] - 1 }, length + 2, width + 2))
                             {
-                                boardState[cp[0], cp[1]] = 1;
-                                boardState[cp[0] + 1, cp[1]] = 1;
+                                for (int deskX = 0; deskX < length; deskX++)
+                                {
+                                    for (int deskY = 0; deskY < width; deskY++)
+                                    {
+                                        boardState[cp[0] + deskX, cp[1] + deskY] = 1;
+                                    }
+                                }
                                 currentdesks++;
                             }
                             else break;
@@ -234,16 +291,26 @@ namespace CCC_40_Rathaus
                     else
                     {
                         priority[usedP] = new int[] { -1, -1 };
-                        boardState[cp[0], cp[1]] = 1;
-                        boardState[cp[0] + 1, cp[1]] = 1;
+                        for (int deskX = 0; deskX < length; deskX++)
+                        {
+                            for (int deskY = 0; deskY < width; deskY++)
+                            {
+                                boardState[cp[0] + deskX, cp[1] + deskY] = 1;
+                            }
+                        }
                         currentdesks++;
                         while (true)
                         {
-                            cp[1] += 2;
-                            if (cp[1] < y && IsFree(boardState, new int[] { cp[0] - 1, cp[1] - 1 }, 4, 3))
+                            cp[1] += width + 1;
+                            if (cp[1] < y && IsFree(boardState, new int[] { cp[0] - 1, cp[1] - 1 }, length + 2, width + 2))
                             {
-                                boardState[cp[0], cp[1]] = 1;
-                                boardState[cp[0] + 1, cp[1]] = 1;
+                                for (int deskX = 0; deskX < length; deskX++)
+                                {
+                                    for (int deskY = 0; deskY < width; deskY++)
+                                    {
+                                        boardState[cp[0] + deskX, cp[1] + deskY] = 1;
+                                    }
+                                }
                                 currentdesks++;
                             }
                             else break;
@@ -251,35 +318,47 @@ namespace CCC_40_Rathaus
                     }
                 }
                 //Flach nach links warum auch immer
-                else if (cp[0] < x && cp[1] < y && IsFree(boardState, new int[] { cp[0] - 2, cp[1] - 1 }, 4, 3))
+                else if (cp[0] < x && cp[1] < y && IsFree(boardState, new int[] { cp[0] - length, cp[1] - 1 }, length + 2, width + 2))
                 {
-                    boardState[cp[0], cp[1]] = 1;
-                    boardState[cp[0] - 1, cp[1]] = 1;
+                    for (int deskX = 0; deskX < length; deskX++)
+                    {
+                        for (int deskY = 0; deskY < width; deskY++)
+                        {
+                            boardState[cp[0] - deskX, cp[1] + deskY] = 1;
+                        }
+                    }
                     currentdesks++;
                 }
                 //stehend nach oben warum auch immer
-                else if (cp[0] < x && cp[1] < y && IsFree(boardState, new int[] { cp[0] - 1, cp[1] - 2 }, 3, 4))
+                else if (cp[0] < x && cp[1] < y && IsFree(boardState, new int[] { cp[0] - 1, cp[1] - length }, width + 2, length + 2))
                 {
-                    boardState[cp[0], cp[1]] = 1;
-                    boardState[cp[0], cp[1] - 1] = 1;
+                    for (int deskX = 0; deskX < width; deskX++)
+                    {
+                        for (int deskY = 0; deskY < length; deskY++)
+                        {
+                            boardState[cp[0] + deskX, cp[1] - deskY] = 1;
+                        }
+                    }
                     currentdesks++;
                 }
-                //Console.WriteLine($"\n{currentdesks}\n1 - X:{priority[0][0]} Y:{priority[0][1]}\n2 - X:{priority[1][0]} Y:{priority[1][1]}");
-                //for (int drawY = 0; drawY < y; drawY++)
-                //{
-                //    for (int drawX = 0; (drawX < x); drawX++) 
-                //    {
-                //        if ((priority[0][0] == drawX && priority[0][1] == drawY) || (priority[1][0] == drawX && priority[1][1] == drawY))
-                //        {
-                //            Console.ForegroundColor = ConsoleColor.Red;
-                //            Console.Write(boardState[drawX, drawY] == 1 ? "X" : "#");
-                //            Console.ResetColor();
-                //        }
-                //        else Console.Write(boardState[drawX, drawY] == 1 ? "X" : ".");
+                else break;
+                Console.WriteLine($"\nCurrentDesks : {currentdesks}\nTotalDesks : {desks}\n1 - X:{priority[0][0]} Y:{priority[0][1]}\n2 - X:{priority[1][0]} Y:{priority[1][1]}");
+                for (int drawY = 0; drawY < y; drawY++)
+                {
+                    for (int drawX = 0; (drawX < x); drawX++)
+                    {
+                        if ((priority[0][0] == drawX && priority[0][1] == drawY) || (priority[1][0] == drawX && priority[1][1] == drawY))
+                        {
+                            Console.ForegroundColor = ConsoleColor.Red;
+                            Console.Write(boardState[drawX, drawY] == 1 ? "X" : "#");
+                            Console.ResetColor();
+                        }
+                        else Console.Write(boardState[drawX, drawY] == 1 ? "X" : ".");
 
-                //    }
-                //    Console.WriteLine();
-                //}
+                    }
+                    Console.WriteLine();
+                }
+                Console.ReadLine();
 
 
             }
