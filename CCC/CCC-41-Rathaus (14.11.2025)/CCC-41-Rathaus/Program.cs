@@ -13,16 +13,16 @@ namespace CCC_41_Rathaus
 
         const string levelRootPathZyni = @"C:\Users\User42\Downloads\CCC-Levels\";
         const string levelRootPathLeuchty = @"C:\Users\valen\source\repos\zyni42\Dev.Catalysts\CCC\CCC-41-Rathaus (14.11.2025)\Levels";
-        const int LEVEL = 1;
+        const int LEVEL = 6;
         static string[] SUBLEVELS = { "small", "large" };
-        const bool EXAMPLE = true;
+        const bool EXAMPLE = false;
         static void Main(string[] args)
         {
             if (EXAMPLE)
             {
                 string[] rawInputData = File.ReadAllLines($"{levelRootPathLeuchty}\\level{LEVEL}\\level{LEVEL}_0_example.in");
                 StreamWriter outputFile = new StreamWriter($"{levelRootPathLeuchty}\\level{LEVEL}\\level{LEVEL}_0_my_example.out");
-                Level.Solve1(rawInputData, outputFile);
+                Level6.Solve(rawInputData, outputFile);
                 outputFile.Flush();
                 outputFile.Close();
                 return;
@@ -31,11 +31,11 @@ namespace CCC_41_Rathaus
             {
                 foreach (string subl in SUBLEVELS)
                 {
-                    string[] rawInputData = File.ReadAllLines($"{levelRootPathLeuchty}\\level{LEVEL}\\level{LEVEL}_{Array.IndexOf(SUBLEVELS, subl)}_{subl}.in");
-                    StreamWriter outputFile = new StreamWriter($"{levelRootPathLeuchty}\\level{LEVEL}\\level{LEVEL}_{Array.IndexOf(SUBLEVELS, subl)}_{subl}.out");
+                    string[] rawInputData = File.ReadAllLines($"{levelRootPathLeuchty}\\level{LEVEL}\\level{LEVEL}_{Array.IndexOf(SUBLEVELS, subl) + 1}_{subl}.in");
+                    StreamWriter outputFile = new StreamWriter($"{levelRootPathLeuchty}\\level{LEVEL}\\level{LEVEL}_{Array.IndexOf(SUBLEVELS, subl) + 1}_{subl}.out");
                     Console.WriteLine(subl);
                     outputFile.AutoFlush = true;
-                    Level.Solve1(rawInputData, outputFile);
+                    Level6.Solve(rawInputData, outputFile);
                     outputFile.Flush();
                     outputFile.Close();
                 }
